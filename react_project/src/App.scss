@@ -1,0 +1,26 @@
+// App.scss
+.App {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+
+  h1 {
+    color: #ff6b6b; // 수빈이가 좋아하는 색으로 바꿔봐!
+    transition: all 0.3s;
+
+    &:hover {
+      color: #fcc419;
+      transform: scale(1.1);
+    }
+  }
+
+  .my-name {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}
