@@ -1,0 +1,31 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 레이아웃
+// ============================================================
+
+// 전체 wrap
+.wrap {
+	min-height: 100vh;
+	background: $color_gray_bg;
+}
+
+// 콘텐츠 컨테이너
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 20px;
+}
+
+// 페이지 헤더 (타이틀 + 버튼 영역)
+.page_header {
+	@include flex_between;
+	margin-bottom: 20px;
+
+	.page_title {
+		font-size: $font_size_lg;
+		font-weight: bold;
+		color: $color_dark;
+	}
+}

@@ -1,0 +1,61 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 뱃지 / 태그
+// ============================================================
+.badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: $border-radius-pill;
+	font-size: $font_size_sm;
+	font-weight: bold;
+	line-height: 1.6;
+
+	&.badge_blue		{ background: $color_blue_bg;	color: $color_blue;		border: 1px solid $color_blue_border; }
+	&.badge_red			{ background: $color_red_bg;	color: $color_red;		border: 1px solid $color_red_border; }
+	&.badge_green		{ background: $color_green_bg;	color: $color_green;	border: 1px solid $color_green_border; }
+	&.badge_yellow		{ background: $color_yellow_bg;	color: $color_yellow;	border: 1px solid $color_yellow_border; }
+	&.badge_gray		{ background: $color_gray_bg;	color: $color_gray;		border: 1px solid $color_gray_border; }
+}
+
+// ============================================================
+// 페이지네이션
+// ============================================================
+.pagination {
+	@include flex_center;
+	gap: 4px;
+	margin-top: 24px;
+
+	// 페이지 번호 버튼
+	.page_btn {
+		min-width: 32px;
+		height: 32px;
+		padding: 0 6px;
+		border: 1px solid $color_gray_border;
+		border-radius: $border-radius-base;
+		background: $color_white;
+		color: $color_dark;
+		font-size: $font_size_base;
+		cursor: pointer;
+
+		&:hover {
+			border-color: $color_blue;
+			color: $color_blue;
+		}
+
+		// 현재 페이지
+		&.active {
+			background: $color_blue;
+			border-color: $color_blue;
+			color: $color_white;
+		}
+
+		// 이전/다음 버튼
+		&:disabled {
+			color: $color_gray;
+			cursor: not-allowed;
+			background: $color_gray_bg;
+		}
+	}
+}

@@ -1,0 +1,61 @@
+@use './variables' as *;
+
+// 버튼 색상 변수
+$color-btn-add-bg:		$color_blue_bg;
+$color-btn-add-text:	$color_blue;
+$color-btn-add-border:	$color_blue_border;
+
+$color-btn-edit-bg:		$color_white;
+$color-btn-edit-text:	$color_dark;
+$color-btn-edit-border:	$color_gray_border;
+
+$color-btn-del-bg:		$color_red_bg;
+$color-btn-del-text:	$color_red;
+$color-btn-del-border:	$color_red_border;
+
+$color-btn-cancel-bg:		$color_gray_bg;
+$color-btn-cancel-text:		$color_gray;
+$color-btn-cancel-border:	$color_gray_border;
+
+// ============================================================
+// 버튼
+// ============================================================
+
+// 기본 버튼
+.btn {
+	padding: 6px 14px;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	cursor: pointer;
+	font-size: $font_size_base;
+	font-family: inherit;
+}
+
+// 추가 버튼
+.btn_add {
+	background: $color-btn-add-bg;
+	color: $color-btn-add-text;
+	border-color: $color-btn-add-border;
+}
+
+// 수정 버튼
+.btn_edit {
+	background: $color-btn-edit-bg;
+	color: $color-btn-edit-text;
+	border-color: $color-btn-edit-border;
+}
+
+// 삭제 버튼
+.btn_del {
+	background: $color-btn-del-bg;
+	color: $color-btn-del-text;
+	border-color: $color-btn-del-border;
+}
+
+// 취소 버튼
+.btn_cancel {
+	background: $color-btn-cancel-bg;
+	color: $color-btn-cancel-text;
+	border-color: $color-btn-cancel-border;
+}

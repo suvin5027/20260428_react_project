@@ -1,0 +1,58 @@
+// flex 정렬
+@mixin flex_center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@mixin flex_between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+// 여백
+// 예시: @include mt(20) → margin-top: 20px
+@mixin mt($n) { margin-top: #{$n}px; }
+@mixin mb($n) { margin-bottom: #{$n}px; }
+@mixin ml($n) { margin-left: #{$n}px; }
+@mixin mr($n) { margin-right: #{$n}px; }
+@mixin pt($n) { padding-top: #{$n}px; }
+@mixin pb($n) { padding-bottom: #{$n}px; }
+@mixin pl($n) { padding-left: #{$n}px; }
+@mixin pr($n) { padding-right: #{$n}px; }
+
+// position
+@mixin abs_center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin abs_fill {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+// 1줄 말줄임
+@mixin ellipse_1 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-break: break-all;
+}
+
+// n줄 말줄임 (기본 2줄)
+// 예시 : @include ellipse_n(3) = 기본값이 2줄이라서 @include ellipse_n 이렇게만 쓰면 2줄 말줄임
+@mixin ellipse_n($line: 2) {
+	display: -webkit-box;
+	-webkit-line-clamp: $line;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	word-break: break-all;
+	text-overflow: ellipsis;
+}

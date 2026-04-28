@@ -1,0 +1,61 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 팝업
+// ============================================================
+
+// 배경 오버레이
+.popup_overlay {
+	@include abs_fill;
+	position: fixed;
+	background: rgba($color_black, 0.5);
+	z-index: 100;
+}
+
+// 팝업 박스
+.popup {
+	@include abs_center;
+	position: fixed;
+	background: $color_white;
+	border-radius: $border-radius-base;
+	z-index: 101;
+	min-width: 400px;
+
+	// 팝업 헤더
+	.popup_header {
+		@include flex_between;
+		padding: 16px 20px;
+		border-bottom: 1px solid $color_gray_border;
+
+		.popup_title {
+			font-size: $font_size_lg;
+			font-weight: bold;
+			color: $color_dark;
+		}
+
+		// 닫기 버튼
+		.popup_close {
+			cursor: pointer;
+			color: $color_gray;
+			font-size: 18px;
+
+			&:hover {
+				color: $color_dark;
+			}
+		}
+	}
+
+	// 팝업 본문
+	.popup_body {
+		padding: 20px;
+	}
+
+	// 팝업 하단 버튼 영역
+	.popup_footer {
+		@include flex_center;
+		gap: 8px;
+		padding: 12px 20px;
+		border-top: 1px solid $color_gray_border;
+	}
+}

@@ -1,0 +1,37 @@
+@use './variables' as *;
+
+// ============================================================
+// 테이블
+// ============================================================
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid $color_gray_border;
+
+	th, td {
+		padding: 10px 12px;
+		border: 1px solid $color_gray_border;
+		text-align: left;
+		font-size: $font_size_base;
+	}
+
+	th {
+		background: $color_gray_bg;
+		font-weight: bold;
+		color: $color_dark;
+	}
+
+	// hover 기본 적용
+	tr:hover td {
+		background: $color_blue_bg;
+	}
+
+	// 줄 없는 버전
+	&.table_borderless {
+		border: none;
+
+		th, td {
+			border: none;
+		}
+	}
+}

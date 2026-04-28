@@ -1,0 +1,14 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 푸터
+// ============================================================
+.footer {
+	@include flex_center;
+	height: 60px;
+	background: $color_white;
+	border-top: 1px solid $color_gray_border;
+	font-size: $font_size_sm;
+	color: $color_gray;
+}

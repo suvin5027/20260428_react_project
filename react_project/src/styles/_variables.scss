@@ -1,0 +1,57 @@
+// ============================================================
+// 기본 색상
+// ============================================================
+$color_black:	#000;
+$color_dark:	var(--dark);
+$color_gray:	var(--gray);
+$color_white:	var(--white);
+$color_red:		#ff4d4f;
+$color_pink:	#eb2f96;
+$color_orange:	#fa8c16;
+$color_yellow:	#faad14;
+$color_green:	#52c41a;
+$color_blue:	#1890ff;
+$color_purple:	#722ed1;
+$color_primary:	$color_blue;
+
+// sub (보조색)
+$color_red_sub:		#ff7875;
+$color_pink_sub:	#ff85c2;
+$color_orange_sub:	#ffa940;
+$color_yellow_sub:	#ffc53d;
+$color_green_sub:	#73d13d;
+$color_blue_sub:	#91d5ff;
+$color_purple_sub:	#b37feb;
+
+// bg
+$color_gray_bg:		var(--gray-bg);
+$color_red_bg:		#fff1f0;
+$color_pink_bg:		#fff0f6;
+$color_orange_bg:	#fff7e6;
+$color_yellow_bg:	#fffbe6;
+$color_green_bg:	#f6ffed;
+$color_blue_bg:		#e6f7ff;
+$color_purple_bg:	#f9f0ff;
+
+// border
+$color_gray_border:		var(--gray-border);
+$color_red_border:		#ffa39e;
+$color_pink_border:		#ffadd2;
+$color_orange_border:	#ffd591;
+$color_yellow_border:	#ffe58f;
+$color_green_border:	#b7eb8f;
+$color_blue_border:		$color_blue_sub;
+$color_purple_border:	#d3adf7;
+
+// ============================================================
+// 폰트
+// ============================================================
+$font_size_base:	14px;
+$font_size_sm:		12px;
+$font_size_lg:		16px;
+
+// ============================================================
+// 여백 & 모서리 둥글기
+// ============================================================
+$border-radius-base:	4px;
+$border-radius-pill:	20px;

@@ -1,0 +1,44 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 로그인
+// ============================================================
+.login {
+	@include flex_center;
+	min-height: 100vh;
+	background: $color_gray_bg;
+
+	// 로그인 폼 박스
+	.login_box {
+		width: 360px;
+		padding: 40px;
+		background: $color_white;
+		border: 1px solid $color_gray_border;
+		border-radius: $border-radius-base;
+	}
+
+	.login_title {
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 24px;
+	}
+
+	// 입력 필드
+	.login_field {
+		margin-bottom: 16px;
+
+		label {
+			display: block;
+			margin-bottom: 6px;
+			font-size: $font_size_sm;
+			color: $color_gray;
+		}
+	}
+
+	.btn_primary {
+		width: 100%;
+		padding: 10px;
+	}
+}

@@ -1,0 +1,110 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 폼 초기값
+// ============================================================
+input,
+textarea,
+select {
+	font-size: $font_size_base;
+	font-family: inherit;
+	color: $color_dark;
+	outline: none;
+}
+
+// ============================================================
+// input
+// ============================================================
+.input_text {
+	padding: 7px 11px;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	transition: border-color 0.2s;
+
+	&:focus {
+		border-color: $color_blue;
+	}
+
+	&::placeholder {
+		color: $color_gray;
+	}
+
+	&:disabled {
+		background: $color_gray_bg;
+		color: $color_gray;
+		cursor: not-allowed;
+	}
+}
+
+.input_check,
+.input_radio {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	accent-color: $color_primary;
+}
+
+// ============================================================
+// select
+// ============================================================
+.select {
+	padding: 7px 11px;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	cursor: pointer;
+	transition: border-color 0.2s;
+
+	&:focus {
+		border-color: $color_blue;
+	}
+
+	&:disabled {
+		background: $color_gray_bg;
+		color: $color_gray;
+		cursor: not-allowed;
+	}
+}
+
+// ============================================================
+// textarea
+// ============================================================
+.textarea {
+	padding: 7px 11px;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	resize: vertical;
+	min-height: 100px;
+	transition: border-color 0.2s;
+
+	&:focus {
+		border-color: $color_blue;
+	}
+
+	&::placeholder {
+		color: $color_gray;
+	}
+
+	&:disabled {
+		background: $color_gray_bg;
+		color: $color_gray;
+		cursor: not-allowed;
+	}
+}
+
+// ============================================================
+// 폼 그룹
+// ============================================================
+.form_group {
+	margin-bottom: 16px;
+
+	label {
+		display: block;
+		margin-bottom: 6px;
+		font-size: $font_size_sm;
+		color: $color_gray;
+	}
+}

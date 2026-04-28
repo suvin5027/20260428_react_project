@@ -1,0 +1,48 @@
+@use './variables' as *;
+@use './mixin' as *;
+
+// ============================================================
+// 헤더
+// ============================================================
+.header {
+	@include flex_between;
+	height: 60px;
+	padding: 0 20px;
+	background: $color_white;
+	border-bottom: 1px solid $color_gray_border;
+
+	// 로고
+	.header_logo {
+		font-size: $font_size_lg;
+		font-weight: bold;
+		color: $color_primary;
+	}
+
+	// 메뉴
+	.header_menu {
+		@include flex_center;
+		gap: 20px;
+
+		a {
+			font-size: $font_size_base;
+			color: $color_dark;
+
+			&:hover {
+				color: $color_primary;
+			}
+
+			&.active {
+				color: $color_primary;
+				font-weight: bold;
+			}
+		}
+	}
+
+	// 유저 정보 영역
+	.header_info {
+		@include flex_center;
+		gap: 10px;
+		font-size: $font_size_sm;
+		color: $color_gray;
+	}
+}

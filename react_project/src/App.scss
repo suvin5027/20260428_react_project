@@ -1,15 +1,20 @@
-.app {
-	padding: 40px;
+// ============================================================
+// App.scss — 스타일 진입점
+// 모든 스타일 파일을 여기서 한 번에 불러온다
+// ============================================================
 
-	.title {
-		font-size: 2rem;
-		color: #333;
-		text-align: center;
-	}
-
-	.desc {
-		margin-top: 20px;
-		color: #666;
-		line-height: 1.6;
-	}
-}
+@use './styles/reset';      // 전체 초기화
+@use './styles/theme';      // 라이트 / 다크 모드
+@use './styles/font';       // 폰트
+@use './styles/layout';     // 레이아웃
+@use './styles/header';     // 헤더
+@use './styles/footer';     // 푸터
+@use './styles/common';     // 전체 공통 스타일
+@use './styles/form';       // 공통 폼/입력 스타일
+@use './styles/button';     // 공통 버튼 스타일
+@use './styles/table';      // 공통 테이블 스타일
+@use './styles/popup';      // 팝업
+@use './styles/login';      // 로그인 페이지 스타일
+@use './styles/board';      // 게시판 페이지 스타일
+@use './styles/admin';      // 어드민 페이지 스타일
+@use './styles/main';       // 메인 페이지 스타일
