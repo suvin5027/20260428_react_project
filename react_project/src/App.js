@@ -1,11 +1,32 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Main from './pages/Main';
+import Login from './pages/Login';
+import BoardList from './pages/board/BoardList';
+import BoardDetail from './pages/board/BoardDetail';
+import BoardWrite from './pages/board/BoardWrite';
+import Admin from './pages/Admin';
 import './App.scss';
 
 function App() {
 	return (
-		<div className="app">
-			<h1 className="title">React 프로젝트</h1>
-			<p className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus nulla.</p>
-		</div>
+		<BrowserRouter>
+			<div className="wrap">
+				<Header />
+				<div className="container">
+					<Routes>
+						<Route path="/" element={<Main />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/board" element={<BoardList />} />
+						<Route path="/board/write" element={<BoardWrite />} />
+						<Route path="/board/:id" element={<BoardDetail />} />
+						<Route path="/admin" element={<Admin />} />
+					</Routes>
+				</div>
+				<Footer />
+			</div>
+		</BrowserRouter>
 	);
 }
 
