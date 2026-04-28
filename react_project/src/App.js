@@ -1,24 +1,12 @@
-import React, { useState } from 'react';
 import './App.scss';
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className="App">
-      <header className="header">
-        <h1>React Project Study</h1>
-        <p>Counter: {count}</p>
-
-        <button
-          className="btn-primary"
-          onClick={() => setCount(count + 1)}
-        >
-          Increase
-        </button>
-      </header>
-    </div>
-  );
+	return (
+		<div className="app">
+			<h1 className="title">React 프로젝트</h1>
+			<p className="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus nulla.</p>
+		</div>
+	);
 }
 
 export default App;
