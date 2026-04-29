@@ -1,6 +1,6 @@
 function BoardDetail() {
 	return (
-		<div className="board">
+		<div className="board_container board_detail_container">
 		</div>
 	);
 }

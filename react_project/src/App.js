@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import BoardList from './pages/board/BoardList';
 import BoardDetail from './pages/board/BoardDetail';
 import BoardWrite from './pages/board/BoardWrite';
+import BoardEdit from './pages/board/BoardEdit';
 import Admin from './pages/Admin';
 import './App.scss';
 
@@ -21,6 +22,7 @@ function App() {
 						<Route path="/board" element={<BoardList />} />
 						<Route path="/board/write" element={<BoardWrite />} />
 						<Route path="/board/:id" element={<BoardDetail />} />
+						<Route path="/board/:id/edit" element={<BoardEdit />} />
 						<Route path="/admin" element={<Admin />} />
 					</Routes>
 				</div>

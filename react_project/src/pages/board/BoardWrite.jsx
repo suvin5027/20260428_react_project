@@ -1,6 +1,6 @@
 function BoardWrite() {
 	return (
-		<div className="board">
+		<div className="board_container board_write_container">
 		</div>
 	);
 }
