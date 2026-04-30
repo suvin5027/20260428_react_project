@@ -1,21 +1,25 @@
 @use './variables' as *;
 
 // 버튼 색상 변수
-$color-btn-add-bg:		$color_blue_bg;
-$color-btn-add-text:	$color_blue;
-$color-btn-add-border:	$color_blue_border;
+$color-btn-add-bg:		$color_primary;
+$color-btn-add-text:	$color_white;
+$color-btn-add-border:	$color_primary;
 
-$color-btn-edit-bg:		$color_white;
-$color-btn-edit-text:	$color_dark;
-$color-btn-edit-border:	$color_gray_border;
+$color-btn-edit-bg:		$color_primary;
+$color-btn-edit-text:	$color_white;
+$color-btn-edit-border:	$color_primary;
 
-$color-btn-del-bg:		$color_red_bg;
-$color-btn-del-text:	$color_red;
-$color-btn-del-border:	$color_red_border;
+$color-btn-del-bg:		$color_red;
+$color-btn-del-text:	$color_white;
+$color-btn-del-border:	$color_red;
 
-$color-btn-cancel-bg:		$color_gray_bg;
-$color-btn-cancel-text:		$color_gray;
-$color-btn-cancel-border:	$color_gray_border;
+$color-btn-cancel-bg:		$color_efefef;
+$color-btn-cancel-text:		$color_999;
+$color-btn-cancel-border:	$color_efefef;
+
+$color-btn-list-bg:		$color_555;
+$color-btn-list-text:	$color_white;
+$color-btn-list-border:	$color_555;
 
 // ============================================================
 // 버튼
@@ -27,9 +31,16 @@ $color-btn-cancel-border:	$color_gray_border;
 	border: 1px solid $color_gray_border;
 	border-radius: $border-radius-base;
 	background: $color_white;
-	cursor: pointer;
-	font-size: $font_size_base;
 	font-family: inherit;
+	font-size: $font_size_sm;
+	transition: .2s;
+	cursor: pointer;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_gray_border;
+		color: $color_white;
+		border-color: $color_gray_border;
+	}
 }
 
 // 추가 버튼
@@ -37,13 +48,25 @@ $color-btn-cancel-border:	$color_gray_border;
 	background: $color-btn-add-bg;
 	color: $color-btn-add-text;
 	border-color: $color-btn-add-border;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_white;
+		color: $color-btn-add-bg;
+		border-color: $color-btn-add-bg;
+	}
 }
 
-// 수정 버튼
+// 수정 버튼(현재 추가 버튼과 같은 색, 추후 수정 버튼 색상이 오면 수정 예정)
 .btn_edit {
 	background: $color-btn-edit-bg;
 	color: $color-btn-edit-text;
 	border-color: $color-btn-edit-border;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_white;
+		color: $color-btn-edit-bg;
+		border-color: $color-btn-edit-bg;
+	}
 }
 
 // 삭제 버튼
@@ -51,6 +74,12 @@ $color-btn-cancel-border:	$color_gray_border;
 	background: $color-btn-del-bg;
 	color: $color-btn-del-text;
 	border-color: $color-btn-del-border;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_white;
+		color: $color-btn-del-bg;
+		border-color: $color-btn-del-bg;
+	}
 }
 
 // 취소 버튼
@@ -58,4 +87,23 @@ $color-btn-cancel-border:	$color_gray_border;
 	background: $color-btn-cancel-bg;
 	color: $color-btn-cancel-text;
 	border-color: $color-btn-cancel-border;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_white;
+		color: $color-btn-cancel-text;
+		border-color: $color-btn-cancel-bg;
+	}
+}
+
+// 목록 버튼
+.btn_list {
+	background: $color-btn-list-bg;
+	color: $color-btn-list-text;
+	border-color: $color-btn-list-border;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_white;
+		color: $color-btn-list-bg;
+		border-color: $color-btn-list-bg;
+	}
 }

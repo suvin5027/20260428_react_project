@@ -1,10 +1,41 @@
 // ============================================================
 // 기본 색상
 // ============================================================
+
+// 흑백 & 회색
 $color_black:	#000;
+$color_1a1a1a:	#1a1a1a;
+$color_2d2d2d:	#2d2d2d;
+$color_333:		#333;
+$color_555:		#555;
+$color_666:		#666;
+$color_777:		#777;
+$color_999:		#999;
+$color_aaa:		#aaa;
+$color_ccc:		#ccc;
+$color_ddd:		#ddd;
+$color_efefef:	#efefef;
+$color_f0f0f0:	#f0f0f0;
+$color_f5f5f5:	#f5f5f5;
+$color_white:		#fff;
+
+// 테마 (라이트 / 다크 전환값)
+$light_white:		$color_white;
+$light_dark:		$color_333;
+$light_gray:		$color_666;
+$light_gray_bg:		$color_f5f5f5;
+$light_gray_border:	$color_ddd;
+
+$dark_white:		$color_2d2d2d;
+$dark_dark:			$color_f0f0f0;
+$dark_gray:			$color_aaa;
+$dark_gray_bg:		$color_1a1a1a;
+$dark_gray_border:	$color_555;
+
 $color_dark:	var(--dark);
 $color_gray:	var(--gray);
-$color_white:	var(--white);
+
+// 컬러
 $color_red:		#ff4d4f;
 $color_pink:	#eb2f96;
 $color_orange:	#fa8c16;
@@ -12,7 +43,6 @@ $color_yellow:	#faad14;
 $color_green:	#52c41a;
 $color_blue:	#1890ff;
 $color_purple:	#722ed1;
-$color_primary:	$color_blue;
 
 // sub (보조색)
 $color_red_sub:		#ff7875;
@@ -42,6 +72,18 @@ $color_yellow_border:	#ffe58f;
 $color_green_border:	#b7eb8f;
 $color_blue_border:		$color_blue_sub;
 $color_purple_border:	#d3adf7;
+
+// ============================================================
+// 프로젝트 색상
+// ============================================================
+
+// 주조색 & 텍스트
+$color_primary:		#3E30D6;
+$color_text:		#5E5E60;
+$color_text_bold:	#212529;
+
+// 강조색
+$color_call:	#00D96C;	// 전화하기 버튼
 
 // ============================================================
 // 폰트

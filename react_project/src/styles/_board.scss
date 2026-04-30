@@ -4,6 +4,11 @@
 // ============================================================
 // 게시판
 // ============================================================
+.board_hd_wrap{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
 .board_title{
 	font-size: $font_size_h1;
 	font-weight: $font_weight_heading;
@@ -13,23 +18,17 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	border-top: 2px solid #000;
-	border-bottom: 1px solid #000;
+	min-height: 422px;
+	border-top: 2px solid $color_black;
 }
 .board_item{
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 1px solid #ddd;
-	padding: 10px 5px;
-	transition: .3s;
-
-	&:hover{
-		color: $color_primary;
-	}
+	border-bottom: 1px solid $color_ddd;
 
 	&:last-child{
-		border-bottom: none;
+		border-bottom: 1px solid $color_black;
 	}
 }
 .board_link{
@@ -37,13 +36,43 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	padding: 10px 5px;
+	transition: .3s;
+
+	&:hover{
+		background-color: $color_blue_bg;
+	}
 }
 .board_info__title{
-	width: 85%;
+	width: 90%;
 	@include ellipse_1;
 }
 .board_info{
 	display: flex;
 	gap: 5px;
 	font-size: $font_size_sm;
+}
+
+// board footer
+.board_ft_wrap{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	@include mt(20);
+}
+
+
+
+// pagination
+.pagination_wrap{
+	display: flex;
+	align-items: center;
+}
+.pagination_list{
+	display: flex;
+	align-items: center;
+}
+.pagination_item{
+	display: inline-flex;
+	align-items: center;
 }

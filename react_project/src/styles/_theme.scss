@@ -1,21 +1,22 @@
 // ============================================================
 // 테마 (라이트 / 다크)
 // ============================================================
+@use './variables' as *;
 
 // 라이트 모드 (기본값)
 :root {
-	--white:		#fff;
-	--dark:			#333;
-	--gray:			#666;
-	--gray-bg:		#f5f5f5;
-	--gray-border:	#ddd;
+	--white:		#{$light_white};
+	--dark:			#{$light_dark};
+	--gray:			#{$light_gray};
+	--gray-bg:		#{$light_gray_bg};
+	--gray-border:	#{$light_gray_border};
 }
 
 // 다크 모드
 [data-theme='dark'] {
-	--white:		#2d2d2d;
-	--dark:			#f0f0f0;
-	--gray:			#aaa;
-	--gray-bg:		#1a1a1a;
-	--gray-border:	#444;
+	--white:		#{$dark_white};
+	--dark:			#{$dark_dark};
+	--gray:			#{$dark_gray};
+	--gray-bg:		#{$dark_gray_bg};
+	--gray-border:	#{$dark_gray_border};
 }

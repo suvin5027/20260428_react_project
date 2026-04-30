@@ -31,3 +31,6 @@ Thumbs.db
 tickets/
 CLAUDE.md
 .claude/
+
+# graphify 출력물
+graphify-out/
