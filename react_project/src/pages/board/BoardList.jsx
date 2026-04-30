@@ -1,5 +1,11 @@
+// 외부 라이브러리
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+// 유틸/상수
+import { PAGE_SIZE } from '../../constants'; // 상수 import
+
+// 내부 컴포넌트
 import Pagination from '../../components/Pagination';
 
 const BOARD_LIST = [
@@ -18,8 +24,7 @@ const BOARD_LIST = [
 ]
 
 function BoardList() {
-	const [currentPage, setCurrentPage] = useState(1); // 1페이지부터 시작. 0이 아닌 이유는 페이지 번호를 1부터 세기 때문.
-	const PAGE_SIZE = 10; // 10개씩 자르기
+	const [currentPage, setCurrentPage] = useState(1); // 1페이지부터 시작. 0이 아닌 이유는 페이지 번호를 1부터 세기 때문.!
 	const totalPages = Math.ceil(BOARD_LIST.length / PAGE_SIZE);
 
 	// 현재 페이지에 맞게 잘라내기

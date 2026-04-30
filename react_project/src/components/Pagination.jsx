@@ -1,3 +1,6 @@
+// react-icons MD 아이콘 사용 — 아이콘 목록: https://react-icons.github.io/react-icons/icons/md/
+import { MdFirstPage, MdLastPage, MdChevronLeft, MdChevronRight } from 'react-icons/md';
+
 // currentPage: 현재 페이지 번호 / totalPages: 전체 페이지 수 / onPageChange: 페이지 바꾸는 함수
 function Pagination({ currentPage, totalPages, onPageChange }) {
 	return (
@@ -7,14 +10,14 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
 				className="pagination_btn pagination_btn__first"
 				onClick={() => onPageChange(1)}
 				disabled={currentPage === 1}
-			>&lt;&lt;</button>
+			><MdFirstPage /></button>
 
 			{/* 이전 버튼 — 1페이지면 disabled (클릭 불가) */}
 			<button
 				className="pagination_btn pagination_btn__prev"
 				onClick={() => onPageChange(currentPage - 1)}
 				disabled={currentPage === 1}
-			>&lt;</button>
+			><MdChevronLeft /></button>
 
 			{/* 페이지 번호 목록 */}
 			<ul className="pagination_list">
@@ -36,14 +39,14 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
 				className="pagination_btn pagination_btn__next"
 				onClick={() => onPageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
-			>&gt;</button>
+			><MdChevronRight /></button>
 
 			{/* 마지막 페이지 버튼 — 마지막 페이지면 disabled */}
 			<button
 				className="pagination_btn pagination_btn__last"
 				onClick={() => onPageChange(totalPages)}
 				disabled={currentPage === totalPages}
-			>&gt;&gt;</button>
+			><MdLastPage /></button>
 		</div>
 	);
 }

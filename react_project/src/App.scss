@@ -12,6 +12,7 @@
 @use './styles/common';     // 전체 공통 스타일
 @use './styles/form';       // 공통 폼/입력 스타일
 @use './styles/button';     // 공통 버튼 스타일
+@use './styles/pagination'; // 공통 페이지네이션 스타일
 @use './styles/table';      // 공통 테이블 스타일
 @use './styles/modal';      // 모달(팝업)
 @use './styles/login';      // 로그인 페이지 스타일

@@ -1,0 +1,56 @@
+@use './variables' as *;
+
+// ============================================================
+// 페이지네이션
+// ============================================================
+.pagination_wrap {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.pagination_list {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.pagination_item {
+	display: inline-flex;
+	align-items: center;
+}
+
+// 공통 페이지네이션 버튼 — 아이콘 크기는 font-size로 조절
+.pagination_btn,
+.pagination_btn__page {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 30px;
+	height: 30px;
+	padding: 0 8px;
+	border: 1px solid $color_primary;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	color: $color_primary;
+	font-size: $font_size_sm;
+	font-family: inherit;
+	cursor: pointer;
+	transition: .2s;
+
+	&:hover, &:focus, &._on, &._active {
+		background: $color_primary;
+		color: $color_white;
+		border-color: $color_primary;
+	}
+
+	// disabled 상태
+	&:disabled {
+		border-color: $color_ddd;
+		color: $color_ddd;
+		cursor: default;
+
+		&:hover {
+			background: $color_white;
+			color: $color_ddd;
+		}
+	}
+}
