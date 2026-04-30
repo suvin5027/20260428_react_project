@@ -4,3 +4,46 @@
 // ============================================================
 // 게시판
 // ============================================================
+.board_title{
+	font-size: $font_size_h1;
+	font-weight: $font_weight_heading;
+	@include mb(20);
+}
+.board_wrap{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	border-top: 2px solid #000;
+	border-bottom: 1px solid #000;
+}
+.board_item{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ddd;
+	padding: 10px 5px;
+	transition: .3s;
+
+	&:hover{
+		color: $color_primary;
+	}
+
+	&:last-child{
+		border-bottom: none;
+	}
+}
+.board_link{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.board_info__title{
+	width: 85%;
+	@include ellipse_1;
+}
+.board_info{
+	display: flex;
+	gap: 5px;
+	font-size: $font_size_sm;
+}
