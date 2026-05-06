@@ -61,5 +61,62 @@
 	@include mt(20);
 }
 
+// ============================================================
+// 게시글 상세
+// ============================================================
+
+// 상단: 제목 + 메타 정보
+.board_detail_hd{
+	border-top: 2px solid $color_black;
+	border-bottom: 1px solid $color_ddd;
+	@include mb(0);
+
+	.board_title{
+		padding: 16px 5px 10px;
+		font-size: $font_size_h5;
+		margin-bottom: 0;
+	}
+}
+.board_detail_meta{
+	display: flex;
+	gap: 12px;
+	padding: 0 5px 12px;
+	font-size: $font_size_sm;
+	color: $color_999;
+}
+
+// 본문
+.board_detail_body{
+	min-height: 200px;
+	padding: 24px 5px;
+	font-size: $font_size_base;
+	line-height: 1.7;
+	border-bottom: 1px solid $color_ddd;
+}
+
+// 하단 버튼 영역
+.board_detail_ft{
+	justify-content: space-between;
+}
+.board_btn_wrap{
+	display: flex;
+	gap: 6px;
+}
+
+// ============================================================
+// 게시글 작성 / 수정
+// ============================================================
+.board_form{
+	@include mt(20);
+}
+.board_write_ft{
+	justify-content: flex-end;
+	gap: 6px;
+}
+.input_text,
+.textarea{
+	width: 100%;
+}
+
 
 

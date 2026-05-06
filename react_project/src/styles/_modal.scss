@@ -49,6 +49,12 @@
 	// 팝업 본문
 	.popup_body {
 		padding: 20px;
+
+		.popup_msg {
+			text-align: center;
+			font-size: $font_size_base;
+			color: $color_dark;
+		}
 	}
 
 	// 팝업 하단 버튼 영역
