@@ -112,10 +112,24 @@ textarea{
 .form_group {
 	margin-bottom: 16px;
 
-	label {
+	label,
+	span {
 		display: block;
 		margin-bottom: 6px;
 		font-size: $font_size_sm;
 		color: $color_gray;
 	}
+}
+._required::after {
+	content: '*';
+	margin-left: 2px;
+	color: $color_red;
+}
+.form_error {
+	margin-top: 4px;
+	font-size: $font_size_sm;
+	color: $color_red;
+}
+.input_text._error {
+	border-color: $color_red;
 }

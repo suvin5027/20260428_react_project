@@ -20,6 +20,7 @@
 	width: 100%;
 	min-height: 422px;
 	border-top: 2px solid $color_black;
+	border-bottom: 1px solid $color_black;
 }
 .board_item{
 	display: flex;
@@ -28,7 +29,10 @@
 	border-bottom: 1px solid $color_ddd;
 
 	&:last-child{
-		border-bottom: 1px solid $color_black;
+		border-bottom: 1px solid $color_ddd;
+	}
+	&:nth-child(10):last-child{
+		border-bottom: none;
 	}
 }
 .board_link{
@@ -58,6 +62,9 @@
 	&._general{
 		background: $color_f5f5f5;
 		color: $color_777;
+	}
+	&._question{
+		background: $color_yellow_bg;
 	}
 }
 .board_info__title{
@@ -165,4 +172,65 @@
 }
 
 
+// ============================================================
+// editor(tiptap)
+// ============================================================
+.board_editor{
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-base;
+	overflow: hidden;
+}
+.board_editor_toolbar{
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 6px 8px;
+	border-bottom: 1px solid $color_ddd;
+	background: $color_f5f5f5;
 
+	button{
+		border: 1px solid $color_ddd;
+		border-radius: $border-radius-base;
+		padding: 2px 10px;
+		font-size: $font_size_x;
+		color: $light_dark;
+		background: $color_white;
+		cursor: pointer;
+		transition: .2s;
+
+		&:hover{
+			border-color: $color_blue;
+			color: $color_blue;
+		}
+		&._on{
+			border-color: $color_blue;
+			background: $color_blue;
+			color: $color_white;
+		}
+	}
+}
+.toolbar_divider{
+	width: 1px;
+	height: 16px;
+	background: $color_ddd;
+	margin: 0 4px;
+}
+// EditorContent 내부 ProseMirror 영역
+.board_editor .ProseMirror{
+	min-height: 200px;
+	padding: 12px;
+	font-size: $font_size_sm;
+	line-height: 1.7;
+	outline: none;
+
+	// reset이 em/i에 font: inherit 적용해서 italic이 사라지므로 복구
+	em{ font-style: italic; }
+	strong{ font-weight: bold; }
+
+	// 목록 스타일
+	ul{ list-style: disc; padding-left: 20px; }
+	ol{ list-style: decimal; padding-left: 20px; }
+
+	// 이미지
+	img{ max-width: 100%; height: auto; }
+}

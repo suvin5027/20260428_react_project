@@ -1,45 +1,60 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
+import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
+import { addPost } from '../../utils/boardStorage';
+import { getCurrentUser } from '../../utils/authStorage';
+
+// TipTap 빈 에디터는 "<p></p>"를 반환하므로 태그 제거 후 공백만 남으면 빈값으로 판단
+function isEmptyContent(html) {
+	return !html || html.replace(/<[^>]*>/g, '').trim() === '';
+}
 
 function BoardWrite() {
-	// 제목/내용/카테고리 입력값 state
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
-	// 카테고리 초기값은 'general' — DB에 넘길 코드값 기준
 	const [category, setCategory] = useState('general');
-	// 취소 확인 모달 열림/닫힘
+	const [errors, setErrors] = useState({ title: '', content: '' });
+	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
 
-	// 페이지 이동 hook
 	const navigate = useNavigate();
 
-	// 저장 버튼 — 나중에 API 호출로 교체 예정
-	/*
-	// 나중에 API 연동하면:
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		await boardApi.create({ title, content });	// POST /boards
-		navigate(`/board`);													// 저장 후 목록으로 이동
-  };
-	*/
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log("title : ", title);
-		console.log("content : ", content);
+	const validate = () => {
+		const newErrors = { title: '', content: '' };
+		if (!title.trim()) newErrors.title = '제목을 입력해주세요.';
+		if (isEmptyContent(content)) newErrors.content = '내용을 입력해주세요.';
+		setErrors(newErrors);
+		// 에러가 하나라도 있으면 false
+		return !newErrors.title && !newErrors.content;
 	};
 
-	// 취소 버튼 — 제목/내용 입력값 있으면 모달, 없으면 바로 목록으로
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (!validate()) return;
+		setIsSaveModal(true);
+	};
+
+	const handleConfirmSave = async () => {
+		const user = getCurrentUser();
+
+		/*
+		API 연동 시 교체:
+		await boardApi.create({ category, title, content });	// POST /board
+		*/
+		addPost({ category, title, content, author: user?.name });
+		navigate('/board');
+	};
+
 	const handleCancel = () => {
-		if (title || content) {
+		if (title || !isEmptyContent(content)) {
 			setIsCancelModal(true);
 		} else {
 			navigate('/board');
 		}
 	};
 
-	// 모달에서 확인 눌렀을 때 목록으로 이동
 	const handleConfirmCancel = () => {
 		navigate('/board');
 	};
@@ -50,9 +65,7 @@ function BoardWrite() {
 				<h3 className="board_title">글쓰기</h3>
 			</div>
 
-			{/* onSubmit으로 저장 함수 연결 — button type="submit" 클릭 시 실행 */}
 			<form className="board_form" onSubmit={handleSubmit}>
-				{/* 카테고리 선택 — select도 input과 똑같이 value/onChange로 state 연결 */}
 				<div className="form_group">
 					<div className='board_form__title'>
 						<label htmlFor="category">카테고리</label>
@@ -64,7 +77,6 @@ function BoardWrite() {
 							value={category}
 							onChange={(e) => setCategory(e.target.value)}
 						>
-							{/* CATEGORY_OPTIONS 배열을 순회해서 option 생성 — 나중에 옵션 추가 시 constants만 수정하면 됨 */}
 						{CATEGORY_OPTIONS.map((opt) => (
 							<option key={opt.value} value={opt.value}>{opt.label}</option>
 						))}
@@ -72,36 +84,36 @@ function BoardWrite() {
 					</div>
 				</div>
 
-				{/* 제목 입력 — value/onChange로 state와 연결 */}
 				<div className="form_group">
 					<div className="board_form__title">
-						<label htmlFor="title">제목</label>
+						<label htmlFor="title" className="_required">제목</label>
 					</div>
 					<div className="board_form__content">
 						<input
 							id="title"
 							type="text"
-							className="input_text"
+							className={`input_text${errors.title ? ' _error' : ''}`}
 							placeholder="제목을 입력하세요"
 							value={title}
-							onChange={(e) => setTitle(e.target.value)}
+							onChange={(e) => {
+								setTitle(e.target.value);
+								if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+							}}
 						/>
+						{errors.title && <p className="form_error">{errors.title}</p>}
 					</div>
 				</div>
 
-				{/* 내용 입력 */}
 				<div className="form_group">
 					<div className="board_form__title">
-						<label htmlFor="content">내용</label>
+						<span className="_required">내용</span>
 					</div>
 					<div className="board_form__content">
-						<textarea
-							id="content"
-							className="textarea"
-							placeholder="내용을 입력하세요"
-							value={content}
-							onChange={(e) => setContent(e.target.value)}
-						/>
+						<BoardEditor value={content} onChange={(val) => {
+							setContent(val);
+							if (errors.content) setErrors((prev) => ({ ...prev, content: '' }));
+						}} />
+						{errors.content && <p className="form_error">{errors.content}</p>}
 					</div>
 				</div>
 
@@ -111,10 +123,17 @@ function BoardWrite() {
 				</div>
 			</form>
 
-			{/* 취소 확인 모달 — isCancelModal이 true일 때만 렌더링 */}
+			{isSaveModal && (
+				<Modal
+					message="저장하시겠습니까?"
+					onConfirm={handleConfirmSave}
+					onCancel={() => setIsSaveModal(false)}
+				/>
+			)}
+
 			{isCancelModal && (
 				<Modal
-					message="수정된 내용이 있습니다. 취소하시겠습니까?"
+					message="작성 중인 내용이 있습니다. 취소하시겠습니까?"
 					onConfirm={handleConfirmCancel}
 					onCancel={() => setIsCancelModal(false)}
 				/>
