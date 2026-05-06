@@ -4,6 +4,7 @@ import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
 import { getPost, updatePost } from '../../utils/boardStorage';
+import { isAdmin } from '../../utils/authStorage';
 
 function BoardEdit() {
 	const { id } = useParams();
@@ -69,7 +70,7 @@ function BoardEdit() {
 							value={category}
 							onChange={(e) => setCategory(e.target.value)}
 						>
-							{CATEGORY_OPTIONS.map((opt) => (
+							{CATEGORY_OPTIONS.filter((opt) => opt.value !== 'notice' || isAdmin()).map((opt) => (
 								<option key={opt.value} value={opt.value}>{opt.label}</option>
 							))}
 						</select>

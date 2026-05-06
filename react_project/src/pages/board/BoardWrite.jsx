@@ -4,7 +4,7 @@ import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
 import { addPost } from '../../utils/boardStorage';
-import { getCurrentUser } from '../../utils/authStorage';
+import { getCurrentUser, isAdmin } from '../../utils/authStorage';
 
 // TipTap 빈 에디터는 "<p></p>"를 반환하므로 태그 제거 후 공백만 남으면 빈값으로 판단
 function isEmptyContent(html) {
@@ -77,7 +77,7 @@ function BoardWrite() {
 							value={category}
 							onChange={(e) => setCategory(e.target.value)}
 						>
-						{CATEGORY_OPTIONS.map((opt) => (
+						{CATEGORY_OPTIONS.filter((opt) => opt.value !== 'notice' || isAdmin()).map((opt) => (
 							<option key={opt.value} value={opt.value}>{opt.label}</option>
 						))}
 						</select>

@@ -18,6 +18,12 @@ export function isLoggedIn() {
 	return !!getCurrentUser();
 }
 
+// 관리자 여부 (id가 'admin'인 사용자)
+export function isAdmin() {
+	const user = getCurrentUser();
+	return user?.id === 'admin';
+}
+
 // 회원가입
 // 성공: { success: true }
 // 실패: { success: false, field: '문제 필드명', message: '에러 메시지' }

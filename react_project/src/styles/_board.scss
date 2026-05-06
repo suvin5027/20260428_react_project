@@ -78,6 +78,46 @@
 	font-size: $font_size_sm;
 }
 
+// 검색
+.board_search_wrap{
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	@include mt(16);
+	@include mb(16);
+}
+.board_search_select{
+	padding: 6px 8px;
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-base;
+	font-size: $font_size_sm;
+	background: $color_white;
+	cursor: pointer;
+}
+.board_search_input{
+	width: 260px;
+	padding: 6px 10px;
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-base;
+	font-size: $font_size_sm;
+
+	&:focus{
+		outline: none;
+		border-color: $color_blue;
+	}
+}
+.btn_search{
+	background: $color_555;
+	color: $color_white;
+	border-color: $color_555;
+
+	&:hover, &:focus{
+		background: $color_white;
+		color: $color_555;
+		border-color: $color_555;
+	}
+}
+
 // board footer
 .board_ft_wrap{
 	display: flex;
