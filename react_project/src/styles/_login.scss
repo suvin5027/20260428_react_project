@@ -41,4 +41,18 @@
 		width: 100%;
 		padding: 10px;
 	}
+
+	.login_register {
+		display: flex;
+		justify-content: center;
+		gap: 6px;
+		margin-top: 16px;
+		font-size: $font_size_sm;
+		color: $color_gray;
+
+		a {
+			color: $color_blue;
+			text-decoration: underline;
+		}
+	}
 }

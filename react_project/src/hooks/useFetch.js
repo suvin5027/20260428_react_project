@@ -3,9 +3,9 @@ import instance from '../api/instance';
 
 // API 호출 공통 훅
 function useFetch(url) {
-	const [data, setData]         = useState(null);
+	const [data, setData]	= useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError]       = useState(null);
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		if (!url) return;
