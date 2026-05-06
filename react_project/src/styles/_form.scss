@@ -7,7 +7,18 @@
 input,
 textarea,
 select {
-	font-size: $font_size_base;
+	font-size: $font_size_sm;
+	font-family: inherit;
+	color: $color_dark;
+	outline: none;
+}
+
+textarea{
+	resize: none;
+}
+
+::placeholder{
+	font-size: $font_size_sm;
 	font-family: inherit;
 	color: $color_dark;
 	outline: none;
@@ -76,7 +87,7 @@ select {
 	border: 1px solid $color_gray_border;
 	border-radius: $border-radius-base;
 	background: $color_white;
-	resize: vertical;
+	resize: none;
 	min-height: 100px;
 	transition: border-color 0.2s;
 
