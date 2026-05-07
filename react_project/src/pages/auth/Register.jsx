@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { register } from '../../utils/authStorage';
+import authApi from '../../api/authApi';
 
 function Register() {
 	const [name, setName] = useState('');
 	const [id, setId] = useState('');
+	const [nickname, setNickname] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-	const [errors, setErrors] = useState({ name: '', id: '', email: '', password: '', confirmPassword: '' });
+	const [errors, setErrors] = useState({ name: '', id: '', nickname: '', email: '', password: '', confirmPassword: '' });
 
 	const navigate = useNavigate();
 
 	const validate = () => {
-		const newErrors = { name: '', id: '', email: '', password: '', confirmPassword: '' };
+		const newErrors = { name: '', id: '', nickname: '', email: '', password: '', confirmPassword: '' };
 		if (!name.trim()) newErrors.name = '이름을 입력해주세요.';
 		if (!id.trim()) newErrors.id = '아이디를 입력해주세요.';
+		if (!nickname.trim()) newErrors.nickname = '닉네임을 입력해주세요.';
 		if (!email.trim()) newErrors.email = '이메일을 입력해주세요.';
 		if (!password.trim()) {
 			newErrors.password = '비밀번호를 입력해주세요.';
@@ -28,28 +30,18 @@ function Register() {
 			newErrors.confirmPassword = '비밀번호가 일치하지 않습니다.';
 		}
 		setErrors(newErrors);
-		return !newErrors.name && !newErrors.id && !newErrors.email && !newErrors.password && !newErrors.confirmPassword;
+		return !newErrors.name && !newErrors.id && !newErrors.nickname && !newErrors.email && !newErrors.password && !newErrors.confirmPassword;
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!validate()) return;
 
-		/*
-		API 연동 시 교체:
-		const res = await authApi.register({ name, id, email, password });	// POST /auth/register
-		const result = res.data;
-		if (!result.success) {
-			setErrors((prev) => ({ ...prev, [result.field]: result.message }));
-			return;
-		}
-		*/
-		const result = register({ name, id, email, password });
-
-		if (result.success) {
+		try {
+			await authApi.register({ userId: id, userName: name, nickname, email, password });
 			navigate('/login');
-		} else {
-			setErrors((prev) => ({ ...prev, [result.field]: result.message }));
+		} catch (err) {
+			setErrors((prev) => ({ ...prev, id: '서버 오류가 발생했습니다.' }));
 		}
 	};
 
@@ -83,6 +75,19 @@ function Register() {
 							onChange={(e) => setName(e.target.value)}
 						/>
 						{errors.name && <p className="form_error">{errors.name}</p>}
+					</div>
+
+					<div className="login_field">
+						<label htmlFor="nickname">닉네임</label>
+						<input
+							id="nickname"
+							type="text"
+							className="input_text"
+							placeholder="닉네임을 입력하세요."
+							value={nickname}
+							onChange={(e) => setNickname(e.target.value)}
+						/>
+						{errors.nickname && <p className="form_error">{errors.nickname}</p>}
 					</div>
 
 					<div className="login_field">

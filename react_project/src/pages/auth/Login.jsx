@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../utils/authStorage';
+import authApi from '../../api/authApi';
+import { setCurrentUser } from '../../utils/authStorage';
 
 function Login() {
 	const [id, setId] = useState('');
@@ -17,20 +18,16 @@ function Login() {
 			return;
 		}
 
-		/*
-		API 연동 시 교체:
-		const res = await authApi.login({ id, password });	// POST /auth/login
-		const result = res.data;
-		if (result.success) {
-			localStorage.setItem('token', result.token);	// JWT 토큰 저장
-		}
-		*/
-		const result = login({ id, password });
-
-		if (result.success) {
+		try {
+			const res = await authApi.login({ userId: id, password });
+			setCurrentUser(res.data);
 			navigate('/board');
-		} else {
-			setErrors({ id: result.message });
+		} catch (err) {
+			if (err.response?.status === 401) {
+				setErrors({ id: '아이디 또는 비밀번호가 올바르지 않습니다.' });
+			} else {
+				setErrors({ id: '서버 오류가 발생했습니다.' });
+			}
 		}
 	};
 

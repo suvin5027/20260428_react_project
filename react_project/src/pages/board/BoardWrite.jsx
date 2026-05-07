@@ -43,7 +43,7 @@ function BoardWrite() {
 		API 연동 시 교체:
 		await boardApi.create({ category, title, content });	// POST /board
 		*/
-		addPost({ category, title, content, author: user?.name });
+		addPost({ category, title, content, author: user?.userName });
 		navigate('/board');
 	};
 

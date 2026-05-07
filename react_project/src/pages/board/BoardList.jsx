@@ -10,8 +10,14 @@ import { getPosts } from '../../utils/boardStorage';
 import Pagination from '../../components/Pagination';
 
 function BoardList() {
-	// localStorage에서 목록 초기 로드
-	const [posts, setPosts] = useState(() => getPosts());
+	// localStorage에서 목록 초기 로드 후 공지 상단 고정 + 최신순 정렬
+	const [posts, setPosts] = useState(() =>
+		[...getPosts()].sort((a, b) => {
+			if (a.category === 'notice' && b.category !== 'notice') return -1;
+			if (a.category !== 'notice' && b.category === 'notice') return 1;
+			return b.date.localeCompare(a.date);
+		})
+	);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalPages = Math.ceil(posts.length / PAGE_SIZE);
 

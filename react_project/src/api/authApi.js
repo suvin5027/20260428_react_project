@@ -1,8 +1,8 @@
 import instance from './instance';
 
 const authApi = {
-	login: (data) => instance.post('/auth/login', data),
-	logout: () => instance.post('/auth/logout'),
+	login: (data) => instance.post('/api/user/login', data),
+	register: (data) => instance.post('/api/user/register', data),
 };
 
 export default authApi;
