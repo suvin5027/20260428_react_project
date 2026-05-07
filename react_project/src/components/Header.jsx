@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { isLoggedIn, logout } from '../utils/authStorage';
 
 function Header() {
@@ -21,19 +21,22 @@ function Header() {
 
 	return (
 		<header className="header_container">
-			<div className="header_logo"><a href="/" className="gnb_link">로고</a></div>
+			<div className="header_logo"><Link to="/" className="gnb_link">로고</Link></div>
 			<nav className="header_menu">
 				<ul className="gnb_wrap">
 					<li className="gnb_item">
-						<a href="/board" className="gnb_link">게시판</a>
+						<NavLink to="/board" className={({ isActive }) => `gnb_link${isActive ? ' _active' : ''}`}>게시판</NavLink>
+					</li>
+					<li className="gnb_item">
+						<NavLink to="/board2" className={({ isActive }) => `gnb_link${isActive ? ' _active' : ''}`}>게시판2</NavLink>
 					</li>
 				</ul>
 			</nav>
 			<div className="header_info">
 				{loggedIn ? (
-					<button type="button" className="btn_login" onClick={handleLogout}>로그아웃</button>
+					<button type="button" className="btn btn_logout" onClick={handleLogout}>로그아웃</button>
 				) : (
-					<button type="button" className="btn_login" onClick={() => navigate('/login')}>로그인</button>
+					<button type="button" className="btn btn_login" onClick={() => navigate('/login')}>로그인</button>
 				)}
 			</div>
 		</header>

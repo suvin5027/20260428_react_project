@@ -16,7 +16,7 @@ function App() {
 		<BrowserRouter>
 			<div className="wrap">
 				<Header />
-				<div className="container">
+				<div className="main_container">
 					<Routes>
 						<Route path="/" element={<Main />} />
 						<Route path="/login" element={<Login />} />

@@ -12,10 +12,20 @@
 }
 
 // 콘텐츠 컨테이너
-.container {
-	max-width: 1200px;
+.main_container {
+	width: 100%;
+	height: calc(100vh - 90px);
 	margin: 0 auto;
-	padding: 40px 20px;
+	padding: 0px;
+
+	> [class$="_container"] {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		padding: 20px;
+	}
 }
 
 // 페이지 헤더 (타이틀 + 버튼 영역)

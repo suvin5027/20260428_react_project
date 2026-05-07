@@ -4,11 +4,11 @@
 // ============================================================
 // 푸터
 // ============================================================
-.footer {
+.footer_container {
 	@include flex_center;
-	height: 60px;
-	background: $color_white;
+	height: 30px;
+	background-color: $color_111;
 	border-top: 1px solid $color_gray_border;
 	font-size: $font_size_sm;
-	color: $color_gray;
+	color: $color_white;
 }

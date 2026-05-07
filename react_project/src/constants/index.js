@@ -1,5 +1,5 @@
 // 페이지당 게시글 수
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 15;
 
 // 로컬스토리지 키
 export const STORAGE_KEY = {

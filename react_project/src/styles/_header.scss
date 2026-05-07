@@ -4,45 +4,68 @@
 // ============================================================
 // 헤더
 // ============================================================
-.header {
+.header_container {
 	@include flex_between;
 	height: 60px;
 	padding: 0 20px;
 	background: $color_white;
 	border-bottom: 1px solid $color_gray_border;
+}
+// 로고
+.header_logo {
+	font-size: $font_size_lg;
+	font-weight: bold;
+	color: $color_primary;
+}
 
-	// 로고
-	.header_logo {
-		font-size: $font_size_lg;
-		font-weight: bold;
+// 메뉴
+.header_menu {
+	@include flex_center;
+	gap: 20px;
+}
+
+.gnb_wrap{
+	display: flex;
+	gap: 10px;
+}
+
+.gnb_link {
+	position: relative;
+	padding: 4px;
+	font-size: $font_size_base;
+	font-weight: bold;
+	color: $color_dark;
+
+	&:hover, &:focus, &._active, &._on {
 		color: $color_primary;
-	}
 
-	// 메뉴
-	.header_menu {
-		@include flex_center;
-		gap: 20px;
-
-		a {
-			font-size: $font_size_base;
-			color: $color_dark;
-
-			&:hover {
-				color: $color_primary;
-			}
-
-			&.active {
-				color: $color_primary;
-				font-weight: bold;
-			}
+		&::after{
+			width: 100%;
 		}
 	}
 
-	// 유저 정보 영역
-	.header_info {
-		@include flex_center;
-		gap: 10px;
-		font-size: $font_size_sm;
-		color: $color_gray;
+	&::after{
+		content: "";
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		width: 0%;
+		height: 2px;
+		background: #3E30D6;
+		transition: .3s;
+	}
+}
+
+// 유저 정보 영역
+.header_info {
+	@include flex_center;
+	gap: 10px;
+	font-size: $font_size_sm;
+	color: $color_gray;
+
+	.btn_login{
+		background: $color_primary;
+		color: $color_white;
+		border-color: $color_primary;
 	}
 }
