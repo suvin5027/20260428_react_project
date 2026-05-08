@@ -1,22 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
-import { getPost, updatePost } from '../../utils/boardStorage';
+import boardApi from '../../api/boardApi';
 import { isAdmin } from '../../utils/authStorage';
 
 function BoardEdit() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const post = getPost(id);
-
-	const [title, setTitle] = useState(post?.title ?? '');
-	const [content, setContent] = useState(post?.content ?? '');
-	const [category, setCategory] = useState(post?.category ?? 'general');
+	const [post, setPost] = useState(null);
+	const [title, setTitle] = useState('');
+	const [content, setContent] = useState('');
+	const [category, setCategory] = useState('general');
 	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
+
+	useEffect(() => {
+		boardApi.getDetail(id).then((res) => {
+			const data = res.data;
+			setPost(data);
+			setTitle(data.title);
+			setContent(data.content);
+			setCategory(data.category);
+		});
+	}, [id]);
 
 	if (!post) {
 		return (
@@ -32,11 +41,7 @@ function BoardEdit() {
 	};
 
 	const handleConfirmSave = async () => {
-		/*
-		API 연동 시 교체:
-		await boardApi.update(id, { category, title, content });	// PUT /board/:id
-		*/
-		updatePost(id, { category, title, content });
+		await boardApi.update(id, { category, title, content });
 		navigate(`/board/${id}`);
 	};
 

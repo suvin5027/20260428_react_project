@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
-import { addPost } from '../../utils/boardStorage';
+import boardApi from '../../api/boardApi';
 import { getCurrentUser, isAdmin } from '../../utils/authStorage';
 
 // TipTap 빈 에디터는 "<p></p>"를 반환하므로 태그 제거 후 공백만 남으면 빈값으로 판단
@@ -26,7 +26,6 @@ function BoardWrite() {
 		if (!title.trim()) newErrors.title = '제목을 입력해주세요.';
 		if (isEmptyContent(content)) newErrors.content = '내용을 입력해주세요.';
 		setErrors(newErrors);
-		// 에러가 하나라도 있으면 false
 		return !newErrors.title && !newErrors.content;
 	};
 
@@ -38,12 +37,7 @@ function BoardWrite() {
 
 	const handleConfirmSave = async () => {
 		const user = getCurrentUser();
-
-		/*
-		API 연동 시 교체:
-		await boardApi.create({ category, title, content });	// POST /board
-		*/
-		addPost({ category, title, content, author: user?.userName });
+		await boardApi.create({ category, title, content, userSeq: user?.userSeq });
 		navigate('/board');
 	};
 

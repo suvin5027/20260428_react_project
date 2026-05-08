@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { CATEGORY_LABEL } from '../../constants';
-import { getPost, deletePost } from '../../utils/boardStorage';
+import boardApi from '../../api/boardApi';
 
 function BoardDetail() {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const [post, setPost] = useState(null);
 	const [isDeleteModal, setIsDeleteModal] = useState(false);
 
-	const post = getPost(id);
+	useEffect(() => {
+		boardApi.getDetail(id)
+			.then((res) => setPost(res.data))
+			.catch(() => setPost(null));
+	}, [id]);
 
 	if (!post) {
 		return (
@@ -20,8 +25,8 @@ function BoardDetail() {
 		);
 	}
 
-	const handleDelete = () => {
-		deletePost(id);
+	const handleDelete = async () => {
+		await boardApi.delete(id);
 		navigate('/board');
 	};
 
@@ -35,7 +40,7 @@ function BoardDetail() {
 				</h3>
 				<div className="board_detail_meta">
 					<span className="board_detail_author">{post.author}</span>
-					<span className="board_detail_date">{post.date}</span>
+					<span className="board_detail_date">{post.createdAt}</span>
 				</div>
 			</div>
 

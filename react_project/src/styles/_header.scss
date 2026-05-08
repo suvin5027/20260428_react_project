@@ -6,7 +6,7 @@
 // ============================================================
 .header_container {
 	@include flex_between;
-	height: 60px;
+	height: 48px;
 	padding: 0 20px;
 	background: $color_white;
 	border-bottom: 1px solid $color_gray_border;
