@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
-import { CATEGORY_OPTIONS } from '../../constants';
+import { CATEGORY_OPTIONS, FILE_MAX_COUNT, FILE_MAX_SIZE, FILE_ALLOWED_TYPES } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
 import { getCurrentUser, isAdmin } from '../../utils/authStorage';
@@ -18,18 +18,31 @@ function BoardWrite() {
 	const [content, setContent] = useState('');
 	const [category, setCategory] = useState('general');
 	const [files, setFiles] = useState([]); // 선택한 파일 목록
+	const [fileError, setFileError] = useState('');
 	const [errors, setErrors] = useState({ title: '', content: '' });
 	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
 
 	// 파일 선택 시 기존 목록에 새 파일을 추가
 	const handleFileChange = (e) => {
-		// e.target.files는 FileList 객체 — 배열처럼 보이지만 .filter() .map() 같은 배열 메서드가 없음
-		// Array.from()으로 진짜 배열로 변환해야 나중에 filter/map 사용 가능
 		const selected = Array.from(e.target.files);
 
-		// [...files, ...selected]: 기존 파일 목록 뒤에 새로 선택한 파일들을 이어 붙임
-		// setFiles(selected)만 하면 파일을 두 번 선택할 때 기존 파일이 사라지기 때문
+		const invalidType = selected.find((f) => !FILE_ALLOWED_TYPES.includes(f.type));
+		if (invalidType) {
+			setFileError(`허용되지 않는 파일 형식입니다. (${invalidType.name})`);
+			return;
+		}
+		const oversized = selected.find((f) => f.size > FILE_MAX_SIZE);
+		if (oversized) {
+			setFileError(`파일 크기는 ${FILE_MAX_SIZE / 1024 / 1024}MB 이하여야 합니다. (${oversized.name})`);
+			return;
+		}
+		if (files.length + selected.length > FILE_MAX_COUNT) {
+			setFileError(`파일은 최대 ${FILE_MAX_COUNT}개까지 첨부할 수 있습니다.`);
+			return;
+		}
+
+		setFileError('');
 		setFiles([...files, ...selected]);
 	};
 
@@ -159,9 +172,11 @@ function BoardWrite() {
 							id="file_input"
 							multiple
 							className="file_input"
+							accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip"
 							onChange={handleFileChange}
 						/>
 						<label htmlFor="file_input" className="btn btn_file">파일 선택</label>
+						{fileError && <p className="form_error">{fileError}</p>}
 						{files.length > 0 && (
 							<ul className="file_list">
 								{files.map((file, idx) => (

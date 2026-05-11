@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
-import { CATEGORY_OPTIONS } from '../../constants';
+import { CATEGORY_OPTIONS, FILE_MAX_COUNT, FILE_MAX_SIZE, FILE_ALLOWED_TYPES } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
 import { getCurrentUser, isAdmin } from '../../utils/authStorage';
@@ -19,6 +19,7 @@ function BoardEdit() {
 	const [existingFiles, setExistingFiles] = useState([]); // DB에 저장된 기존 파일
 	const [newFiles, setNewFiles] = useState([]); // 새로 추가할 파일
 	const [deletedFileSeqs, setDeletedFileSeqs] = useState([]); // 삭제할 파일 seq
+	const [fileError, setFileError] = useState('');
 	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
 
@@ -31,6 +32,24 @@ function BoardEdit() {
 	// 파일 선택 시 기존 목록에 새 파일을 추가
 	const handleNewFileChange = (e) => {
 		const selected = Array.from(e.target.files);
+
+		const invalidType = selected.find((f) => !FILE_ALLOWED_TYPES.includes(f.type));
+		if (invalidType) {
+			setFileError(`허용되지 않는 파일 형식입니다. (${invalidType.name})`);
+			return;
+		}
+		const oversized = selected.find((f) => f.size > FILE_MAX_SIZE);
+		if (oversized) {
+			setFileError(`파일 크기는 ${FILE_MAX_SIZE / 1024 / 1024}MB 이하여야 합니다. (${oversized.name})`);
+			return;
+		}
+		// 기존 파일 수 + 새 파일 수 합산해서 개수 검사
+		if (existingFiles.length + newFiles.length + selected.length > FILE_MAX_COUNT) {
+			setFileError(`파일은 최대 ${FILE_MAX_COUNT}개까지 첨부할 수 있습니다.`);
+			return;
+		}
+
+		setFileError('');
 		setNewFiles([...newFiles, ...selected]);
 	};
 
@@ -171,9 +190,11 @@ function BoardEdit() {
 							id="file_input"
 							multiple
 							className="file_input"
+							accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip"
 							onChange={handleNewFileChange}
 						/>
 						<label htmlFor="file_input" className="btn btn_file">파일 추가</label>
+						{fileError && <p className="form_error">{fileError}</p>}
 						{newFiles.length > 0 && (
 							<ul className="file_list">
 								{newFiles.map((file, idx) => (
