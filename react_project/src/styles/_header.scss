@@ -11,17 +11,40 @@
 	background: $color_white;
 	border-bottom: 1px solid $color_gray_border;
 }
+@media (max-width: 640px) {
+	.header_container{
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		height: initial;
+	}
+}
 // 로고
 .header_logo {
+	margin-right: auto;
 	font-size: $font_size_lg;
 	font-weight: bold;
 	color: $color_primary;
+}
+@media (max-width: 640px) {
+	.header_logo{
+		display: flex;
+		align-items: center;
+		@include mr(0);
+	}
 }
 
 // 메뉴
 .header_menu {
 	@include flex_center;
 	gap: 20px;
+	@include mr(570);
+}
+@media (max-width: 640px) {
+	.header_menu{
+		width: 400px;
+	@include mr(0);
+	}
 }
 
 .gnb_wrap{
@@ -67,5 +90,71 @@
 		background: $color_primary;
 		color: $color_white;
 		border-color: $color_primary;
+	}
+}
+
+.header_nickname {
+	@include flex_center;
+	gap: 4px;
+	border: none;
+	font-size: $font_size_sm;
+	font-weight: bold;
+	color: $color_dark;
+	background: transparent;
+	cursor: pointer;
+
+	.header_nickname_icon {
+		font-size: 18px;
+		color: $color_gray;
+
+		&._admin { color: $color_primary; }
+	}
+}
+
+// 프로필 팝업
+.header_profile_wrap {
+	position: relative;
+}
+
+.header_profile_popup {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	min-width: 220px;
+	padding: 14px 16px;
+	background: $color_white;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	.popup_session_info {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		font-size: $font_size_sm;
+		color: $color_gray;
+		line-height: 1.5;
+
+		._warn {
+			color: $color_red;
+			font-weight: bold;
+		}
+	}
+
+	.btn_profile_edit {
+		width: 100%;
+		padding: 6px 0;
+		border: 1px solid $color_gray_border;
+		border-radius: $border-radius-pill;
+		font-size: $font_size_sm;
+		color: $color_dark;
+		background: $color_white;
+		cursor: pointer;
+
+		&:hover { background: $color_gray_bg; }
 	}
 }

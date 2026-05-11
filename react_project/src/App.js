@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Main from './pages/Main';
@@ -9,7 +9,13 @@ import BoardDetail from './pages/board/BoardDetail';
 import BoardWrite from './pages/board/BoardWrite';
 import BoardEdit from './pages/board/BoardEdit';
 import Admin from './pages/Admin';
+import { isLoggedIn } from './utils/authStorage';
 import './App.scss';
+
+// 비로그인 시 /login으로 이동
+function ProtectedRoute({ children }) {
+	return isLoggedIn() ? children : <Navigate to="/login" replace />;
+}
 
 function App() {
 	return (
@@ -18,14 +24,15 @@ function App() {
 				<Header />
 				<div className="main_container">
 					<Routes>
-						<Route path="/" element={<Main />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
-						<Route path="/board" element={<BoardList />} />
-						<Route path="/board/write" element={<BoardWrite />} />
-						<Route path="/board/:id" element={<BoardDetail />} />
-						<Route path="/board/:id/edit" element={<BoardEdit />} />
-						<Route path="/admin" element={<Admin />} />
+						<Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
+						<Route path="/board" element={<ProtectedRoute><BoardList /></ProtectedRoute>} />
+						<Route path="/board/write" element={<ProtectedRoute><BoardWrite /></ProtectedRoute>} />
+						<Route path="/board/:id" element={<ProtectedRoute><BoardDetail /></ProtectedRoute>} />
+						<Route path="/board/:id/edit" element={<ProtectedRoute><BoardEdit /></ProtectedRoute>} />
+						<Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+						<Route path="*" element={<ProtectedRoute><Navigate to="/" replace /></ProtectedRoute>} />
 					</Routes>
 				</div>
 				<Footer />
