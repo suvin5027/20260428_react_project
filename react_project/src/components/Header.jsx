@@ -21,7 +21,7 @@ function Header() {
 
 	return (
 		<header className="header_container">
-			<div className="header_logo"><Link to="/" className="gnb_link">로고</Link></div>
+			<div className="header_logo"><Link to="/" className="logo">로고</Link></div>
 			<nav className="header_menu">
 				<ul className="gnb_wrap">
 					<li className="gnb_item">
