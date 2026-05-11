@@ -79,7 +79,7 @@ function BoardDetail() {
 			{/* 첨부파일 */}
 			{files.length > 0 && (
 				<div className="board_detail_footer">
-					<h6 className="file_title">첨부파일</h6>
+					<h6 className="file_title">첨부파일 다운로드</h6>
 					<ul className="file_list">
 						{files.map((file) => (
 							<li key={file.fileSeq} className="file_list_item">

@@ -69,8 +69,16 @@
 	}
 }
 .board_info__title{
+	display: flex;
+	align-items: center;
+	gap: 4px;
 	width: 90%;
 	@include ellipse_1;
+}
+.icon_attach{
+	flex-shrink: 0;
+	color: $color_blue;
+	font-size: 14px;
 }
 .board_info{
 	display: flex;
@@ -189,12 +197,16 @@
 // 본문
 .board_detail_body{
 	width: 100%;
-	min-height: 200px;
+	min-height: 655px;
 	line-height: 1.7;
 	border-bottom: 1px solid $color_ddd;
 	padding: 24px 5px;
 	font-size: $font_size_base;
 	overflow-y: auto;
+}
+// 첨부파일 영역이 있으면 본문 높이 축소
+.board_detail_container:has(.board_detail_footer) .board_detail_body{
+	min-height: 524px;
 }
 
 // 첨부파일 (상세 페이지)
@@ -205,11 +217,17 @@
 }
 
 // 파일 목록 (상세/작성/수정 공통)
+.file_title{
+	font-size: $font_size_s;
+}
 .file_list{
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	min-height: 80px;
+	max-height: 80px;
 	margin-top: 6px;
+	overflow-y: auto;
 }
 .file_list_item{
 	display: flex;

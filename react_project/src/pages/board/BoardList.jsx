@@ -1,7 +1,7 @@
 // 외부 라이브러리
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { MdSearch } from 'react-icons/md';
+import { MdSearch, MdAttachFile } from 'react-icons/md';
 
 // API / 상수
 import boardApi from '../../api/boardApi';
@@ -102,7 +102,10 @@ function BoardList() {
 						<li key={item.boardSeq} className='board_item'>
 							<Link to={`/board/${item.boardSeq}`} className='board_link' title={item.title}>
 								<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
-								<span className='board_info__title'>{item.title}</span>
+								<span className='board_info__title'>
+									{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+									<span>{item.title}</span>
+								</span>
 								<div className='board_info'>
 									<span className='board_info__date'>{item.createdAt}</span>
 								</div>
