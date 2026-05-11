@@ -25,6 +25,11 @@ $color-btn-list-border:	$color_555;
 // 버튼
 // ============================================================
 
+button {
+	cursor: pointer;
+	transition: .3s;
+}
+
 // 기본 버튼
 .btn {
 	padding: 6px 14px;
@@ -33,7 +38,6 @@ $color-btn-list-border:	$color_555;
 	background: $color_white;
 	font-family: inherit;
 	font-size: $font_size_sm;
-	transition: .2s;
 	cursor: pointer;
 
 	&:hover, &:focus, &._on, &._active {
@@ -105,5 +109,48 @@ $color-btn-list-border:	$color_555;
 		background: $color_white;
 		color: $color-btn-list-bg;
 		border-color: $color-btn-list-bg;
+	}
+}
+
+// 파일 선택 버튼 (label 태그라 inline-block 필요)
+.btn_file{
+	display: inline-block;
+	cursor: pointer;
+}
+
+// 다운로드 버튼 — 아이콘 + 파일명 텍스트 스타일
+.btn_download{
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	background: none;
+	border: none;
+	padding: 0;
+	color: $color_blue;
+	font-size: $font_size_sm;
+
+	&:hover{
+		color: $color_primary;
+		text-decoration: underline;
+	}
+
+	svg{
+		font-size: 16px;
+		flex-shrink: 0;
+	}
+}
+
+// 파일 삭제 버튼
+.btn_file_del{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: transparent;
+	padding: 4px;
+	font-size: 16px;
+
+	&:hover, &:focus, &._on, &._active {
+		color: $color-btn-cancel-text;
 	}
 }

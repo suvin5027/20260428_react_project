@@ -4,7 +4,9 @@ import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS } from '../../constants';
 import boardApi from '../../api/boardApi';
+import fileApi from '../../api/fileApi';
 import { getCurrentUser, isAdmin } from '../../utils/authStorage';
+import { MdCancel } from 'react-icons/md';
 
 // TipTap 빈 에디터는 "<p></p>"를 반환하므로 태그 제거 후 공백만 남으면 빈값으로 판단
 function isEmptyContent(html) {
@@ -15,9 +17,35 @@ function BoardWrite() {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [category, setCategory] = useState('general');
+	const [files, setFiles] = useState([]); // 선택한 파일 목록
 	const [errors, setErrors] = useState({ title: '', content: '' });
 	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
+
+	// 파일 선택 시 기존 목록에 새 파일을 추가
+	const handleFileChange = (e) => {
+		// e.target.files는 FileList 객체 — 배열처럼 보이지만 .filter() .map() 같은 배열 메서드가 없음
+		// Array.from()으로 진짜 배열로 변환해야 나중에 filter/map 사용 가능
+		const selected = Array.from(e.target.files);
+
+		// [...files, ...selected]: 기존 파일 목록 뒤에 새로 선택한 파일들을 이어 붙임
+		// setFiles(selected)만 하면 파일을 두 번 선택할 때 기존 파일이 사라지기 때문
+		setFiles([...files, ...selected]);
+	};
+
+	// 파일 목록에서 X 버튼을 누른 파일 한 개를 제거
+	const handleFileRemove = (idx) => {
+		// [기본 버전]
+		// filter: 배열을 처음부터 끝까지 돌면서 조건이 true인 것만 남긴 '새 배열'을 돌려줌
+		// (_, i) → _는 파일 값(안 씀), i는 지금 몇 번째인지(인덱스)
+		// i !== idx → 클릭한 번호(idx)랑 다른 것만 남김 = 클릭한 것만 빠짐
+		// const nextFiles = files.filter((_, i) => i !== idx);
+		// setFiles(nextFiles);
+
+		// [클린 버전] React 권장 패턴 — prevFiles는 React가 넘겨주는 "진짜 최신 state"
+		// 직접 files를 읽는 것보다 안전하고, 변수 선언 없이 한 줄로 끝남
+		setFiles((prevFiles) => prevFiles.filter((_, i) => i !== idx));
+	};
 
 	const navigate = useNavigate();
 
@@ -37,7 +65,16 @@ function BoardWrite() {
 
 	const handleConfirmSave = async () => {
 		const user = getCurrentUser();
-		await boardApi.create({ category, title, content, userSeq: user?.userSeq });
+
+		// 게시글 저장 후 응답에서 boardSeq 꺼내기
+		const res = await boardApi.create({ category, title, content, userSeq: user?.userSeq });
+		const boardSeq = res.data.boardSeq;
+
+		// 파일이 있을 때만 업로드 (없으면 건너뜀)
+		if (files.length > 0) {
+			await fileApi.upload(boardSeq, files);
+		}
+
 		navigate('/board');
 	};
 
@@ -108,6 +145,35 @@ function BoardWrite() {
 							if (errors.content) setErrors((prev) => ({ ...prev, content: '' }));
 						}} />
 						{errors.content && <p className="form_error">{errors.content}</p>}
+					</div>
+				</div>
+
+				{/* 첨부파일 */}
+				<div className="form_group">
+					<div className="board_form__title">
+						<label>첨부파일</label>
+					</div>
+					<div className="board_form__content">
+						<input
+							type="file"
+							id="file_input"
+							multiple
+							className="file_input"
+							onChange={handleFileChange}
+						/>
+						<label htmlFor="file_input" className="btn btn_file">파일 선택</label>
+						{files.length > 0 && (
+							<ul className="file_list">
+								{files.map((file, idx) => (
+									<li key={idx} className="file_list_item">
+										<span className="file_name">{file.name}</span>
+										<button type="button" className="btn_file_del" onClick={() => handleFileRemove(idx)}>
+											<MdCancel />
+										</button>
+									</li>
+								))}
+							</ul>
+						)}
 					</div>
 				</div>
 

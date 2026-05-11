@@ -115,11 +115,21 @@ textarea{
 	label,
 	span {
 		display: block;
-		margin-bottom: 6px;
 		font-size: $font_size_sm;
 		color: $color_gray;
 	}
+
+	.board_editor_toolbar{
+		span{
+			margin-bottom: 0px;
+		}
+	}
 }
+// 파일 input — label로 대체하므로 숨김
+.file_input{
+	display: none;
+}
+
 ._required::after {
 	content: '*';
 	margin-left: 2px;
