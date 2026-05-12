@@ -52,7 +52,7 @@ button {
 }
 
 // 추가 버튼
-.btn_add {
+.btn_add, .btn_primary {
 	background: $color-btn-add-bg;
 	color: $color-btn-add-text;
 	border-color: $color-btn-add-border;

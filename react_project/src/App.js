@@ -4,6 +4,8 @@ import Footer from './components/Footer';
 import Main from './pages/Main';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import FindId from './pages/auth/FindId';
+import FindPassword from './pages/auth/FindPassword';
 import BoardList from './pages/board/BoardList';
 import BoardDetail from './pages/board/BoardDetail';
 import BoardWrite from './pages/board/BoardWrite';
@@ -26,6 +28,8 @@ function App() {
 					<Routes>
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
+						<Route path="/find-id" element={<FindId />} />
+						<Route path="/find-password" element={<FindPassword />} />
 						<Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
 						<Route path="/board" element={<ProtectedRoute><BoardList /></ProtectedRoute>} />
 						<Route path="/board/write" element={<ProtectedRoute><BoardWrite /></ProtectedRoute>} />

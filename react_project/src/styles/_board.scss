@@ -57,20 +57,20 @@
 	font-weight: bold;
 	text-align: center;
 
-	&._notice{
-		background: $color_blue_bg;
-		color: $color_blue;
-	}
 	&._general{
 		background: $color_f5f5f5;
 		color: $color_777;
+	}
+	&._notice{
+		background: $color_red_bg;
+		color: $color_red_sub;
 	}
 	&._question{
 		background: $color_yellow_bg;
 	}
 	&._secret{
-		background: $color_red_bg;
-		color: $color_red_sub;
+		background: $color_blue_bg;
+		color: $color_blue;
 	}
 }
 .board_info__title{

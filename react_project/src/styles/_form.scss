@@ -170,6 +170,19 @@ textarea{
 	display: flex;
 	align-items: center;
 }
+// input 비밀번호
+.input_password {
+	width: 100%;
+	padding: 6px 30px 6px 34px;
+	border: 1px solid $color_gray_border;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	transition: border-color .3s;
+
+	&:focus {
+		border-color: $color_blue;
+	}
+}
 // 파일 input — label로 대체하므로 숨김
 .file_input{
 	display: none;

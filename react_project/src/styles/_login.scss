@@ -53,12 +53,57 @@
 
 		.input_text {
 			padding-left: 34px;
+			padding-right: 34px;
 		}
 	}
 
 	.btn_primary {
 		width: 100%;
 		padding: 10px;
+	}
+
+	// 아이디/비밀번호 저장 체크박스
+	.login_remember {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		@include mt(10);
+
+		.login_remember_item {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			font-size: $font_size_sm;
+			color: $color_gray;
+			cursor: pointer;
+
+			input[type="checkbox"] {
+				cursor: pointer;
+			}
+		}
+	}
+
+	// 아이디/비밀번호 찾기 링크
+	.login_find {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+		margin-top: 12px;
+		font-size: $font_size_sm;
+
+		a {
+			color: $color_gray;
+
+			&:hover {
+				color: $color_blue;
+			}
+		}
+
+		.login_find_divider {
+			color: $color_gray_border;
+		}
 	}
 
 	.login_register {
