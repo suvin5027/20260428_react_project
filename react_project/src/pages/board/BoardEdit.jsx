@@ -165,7 +165,7 @@ function BoardEdit() {
 			await fileApi.upload(boardSeq, newFiles);
 		}
 
-		navigate(`/board/${id}`);
+		navigate(`/board/${id}`, { state: { verified: isVerified } });
 	};
 
 	const handleCancel = () => {
