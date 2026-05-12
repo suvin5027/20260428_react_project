@@ -37,6 +37,25 @@
 		}
 	}
 
+	// 아이콘 + input 묶음
+	.input_icon_wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+
+		.input_icon {
+			position: absolute;
+			left: 10px;
+			font-size: 18px;
+			color: $color_111;
+			pointer-events: none;
+		}
+
+		.input_text {
+			padding-left: 34px;
+		}
+	}
+
 	.btn_primary {
 		width: 100%;
 		padding: 10px;

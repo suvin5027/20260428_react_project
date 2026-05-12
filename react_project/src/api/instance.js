@@ -20,11 +20,12 @@ instance.interceptors.request.use(
 	(error) => Promise.reject(error)
 );
 
-// 응답 인터셉터 — 401 시 로그인 페이지로 이동
+// 응답 인터셉터 — 401 시 로그인 페이지로 이동 (로그인 URL은 제외)
 instance.interceptors.response.use(
 	(response) => response,
 	(error) => {
-		if (error.response?.status === 401) {
+		const url = error.config?.url || '';
+		if (error.response?.status === 401 && !url.includes('/api/user/login')) {
 			localStorage.removeItem('token');
 			window.location.href = '/login';
 		}

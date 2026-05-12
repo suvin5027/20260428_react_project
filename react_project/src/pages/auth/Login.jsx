@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import { setCurrentUser } from '../../utils/authStorage';
+// TODO: MdPerson, MdLock import 추가 (react-icons/md)
+import { MdPerson, MdLock } from 'react-icons/md';
 
 function Login() {
 	const [id, setId] = useState('');
@@ -39,29 +41,36 @@ function Login() {
 				<form onSubmit={handleSubmit}>
 					<div className="login_field">
 						<label htmlFor="id">아이디</label>
-						<input
-							id="id"
-							type="text"
-							className="input_text"
-							placeholder="아이디를 입력하세요."
-							value={id}
-							onChange={(e) => setId(e.target.value)}
-						/>
+						{/* TODO: input_icon_wrap div로 감싸고, MdPerson 아이콘을 input 앞에 추가 */}
+						<div className="input_icon_wrap">
+							<MdPerson className="input_icon" />
+							<input
+								id="id"
+								type="text"
+								className="input_text"
+								placeholder="아이디를 입력하세요."
+								value={id}
+								onChange={(e) => setId(e.target.value)}
+							/>
+						</div>
 					</div>
 
 					<div className="login_field">
 						<label htmlFor="password">비밀번호</label>
-						<input
-							id="password"
-							type="password"
-							className="input_text"
-							placeholder="비밀번호를 입력하세요."
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
+						{/* TODO: input_icon_wrap div로 감싸고, MdLock 아이콘을 input 앞에 추가 */}
+						<div className="input_icon_wrap">
+							<MdLock className="input_icon" />
+							<input
+								id="password"
+								type="password"
+								className="input_text"
+								placeholder="비밀번호를 입력하세요."
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+						</div>
+						{errors.id && <p className="form_error">{errors.id}</p>}
 					</div>
-
-					{errors.id && <p className="form_error">{errors.id}</p>}
 
 					<button type="submit" className="btn btn_primary">로그인</button>
 				</form>
