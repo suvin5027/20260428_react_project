@@ -40,8 +40,9 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	gap: 10px;
 	padding: 10px 5px;
+	color: $color_333;
 	transition: .3s;
 
 	&:hover{
@@ -67,13 +68,24 @@
 	&._question{
 		background: $color_yellow_bg;
 	}
+	&._secret{
+		background: $color_red_bg;
+		color: $color_red_sub;
+	}
 }
 .board_info__title{
+	flex: 1;
 	display: flex;
 	align-items: center;
 	gap: 4px;
-	width: 90%;
-	@include ellipse_1;
+	width: 80%;
+	font-size: $font_size_sm;
+
+	.board_info__cont {
+		width: 100%;
+		@include ellipse_1;
+		text-align: left;
+	}
 }
 .icon_attach{
 	flex-shrink: 0;
@@ -82,9 +94,16 @@
 }
 .board_info{
 	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 	gap: 5px;
-	min-width: 92px;
+	min-width: 140px;
 	font-size: $font_size_sm;
+}
+.board_info__user{
+	width: 60px;
+	@include ellipse_1;
+	text-align: center;
 }
 
 // 검색
@@ -302,7 +321,7 @@
 		color: $light_dark;
 		background: $color_white;
 		cursor: pointer;
-		transition: .2s;
+		transition: .3s;
 
 		&:hover{
 			border-color: $color_blue;

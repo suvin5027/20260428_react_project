@@ -38,7 +38,7 @@
 .header_menu {
 	@include flex_center;
 	gap: 20px;
-	@include mr(570);
+	@include mr(730);
 }
 @media (max-width: 640px) {
 	.header_menu{

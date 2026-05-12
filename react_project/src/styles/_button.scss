@@ -26,6 +26,9 @@ $color-btn-list-border:	$color_555;
 // ============================================================
 
 button {
+	border: none;
+	font-family: inherit;
+	background-color: transparent;
 	cursor: pointer;
 	transition: .3s;
 }
@@ -38,6 +41,7 @@ button {
 	background: $color_white;
 	font-family: inherit;
 	font-size: $font_size_sm;
+	transition: .3s;
 	cursor: pointer;
 
 	&:hover, &:focus, &._on, &._active {
@@ -145,10 +149,25 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: none;
-	background: transparent;
 	padding: 4px;
 	font-size: 16px;
+
+	&:hover, &:focus, &._on, &._active {
+		color: $color-btn-cancel-text;
+	}
+}
+
+// 비밀번호 보기 버틍
+.btn_visible{
+	position: absolute;
+	top: 50%;
+	right: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+	font-size: 16px;
+	transform: translateY(-50%);
 
 	&:hover, &:focus, &._on, &._active {
 		color: $color-btn-cancel-text;

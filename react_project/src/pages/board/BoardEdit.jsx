@@ -1,27 +1,36 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import BoardEditor from '../../components/BoardEditor';
 import { CATEGORY_OPTIONS, FILE_MAX_COUNT, FILE_MAX_SIZE, FILE_ALLOWED_TYPES } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
+import authApi from '../../api/authApi';
 import { getCurrentUser, isAdmin } from '../../utils/authStorage';
-import { MdCancel, MdDownload } from 'react-icons/md';
+import { MdCancel, MdDownload, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 function BoardEdit() {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const user = getCurrentUser();
 
 	const [post, setPost] = useState(null);
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [category, setCategory] = useState('general');
+	const [secret, setSecret] = useState(false); // 비밀글 여부
 	const [existingFiles, setExistingFiles] = useState([]); // DB에 저장된 기존 파일
 	const [newFiles, setNewFiles] = useState([]); // 새로 추가할 파일
 	const [deletedFileSeqs, setDeletedFileSeqs] = useState([]); // 삭제할 파일 seq
 	const [fileError, setFileError] = useState('');
 	const [isSaveModal, setIsSaveModal] = useState(false);
 	const [isCancelModal, setIsCancelModal] = useState(false);
+	// Detail에서 검증 후 넘어온 경우 location.state?.verified || false로 초기값 세팅
+	const [isVerified, setIsVerified] = useState(location.state?.verified || false);
+	const [passwordInput, setPasswordInput] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
 
 	// 기존 파일 X 버튼 클릭 시 — 저장 시 일괄 삭제하도록 seq만 기록, 화면에서 즉시 제거
 	const handleExistingFileRemove = (fileSeq) => {
@@ -65,6 +74,7 @@ function BoardEdit() {
 			setTitle(data.title);
 			setContent(data.content);
 			setCategory(data.category);
+			setSecret(data.category === 'secret'); // 기존 비밀글 여부 초기값 세팅
 		});
 
 		fileApi.getFiles(id).then((res) => {
@@ -81,6 +91,60 @@ function BoardEdit() {
 		);
 	}
 
+	const isOwner = user?.userSeq === post.userSeq;
+	const isAdminUser = user?.userRole === 'ADMIN';
+	const isSecret = post.category === 'secret';
+
+	// 비밀글인데 관리자도 아니고 본인도 아니면 목록으로 redirect
+	if (isSecret && !isAdminUser && !isOwner) {
+		navigate('/board');
+		return null;
+	}
+
+	// 비밀글 + 본인 + 미검증이면 비밀번호 폼만 표시
+	const needsPassword = isSecret && isOwner && !isAdminUser && !isVerified;
+
+	// 비밀번호 검증 — 성공 시 열람 허용(isVerified), 실패 시 에러 메시지 표시
+	const handleVerifyPassword = async () => {
+		try {
+			await authApi.verifyPassword({ userId: user.userId, password: passwordInput });
+			setIsVerified(true);
+		} catch {
+			setPasswordError('비밀번호가 틀렸습니다.');
+		}
+	};
+
+	if (needsPassword) {
+		return (
+			<div className="board_container board_edit_container">
+				<div className="detail_password_box">
+					<h6>비밀번호를 입력하세요.</h6>
+					{/* 비밀번호 input + 눈 아이콘 토글 */}
+					<div className="input_form_group">
+						<input
+							type={showPassword ? 'text' : 'password'}
+							name="modalInput"
+							id="modalInput"
+							className="input_password"
+							autoComplete="new-password"
+							value={passwordInput}
+							onChange={(e) => setPasswordInput(e.target.value)}
+							onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+						/>
+						<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+							{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+						</button>
+					</div>
+					{passwordError && <p className="form_error">{passwordError}</p>}
+					<div className="popup_box_ft">
+						<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
+						<button type="button" className="btn btn_cancel" onClick={() => navigate('/board')}>취소</button>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setIsSaveModal(true);
@@ -93,7 +157,7 @@ function BoardEdit() {
 		}
 
 		// 게시글 수정 후 응답에서 boardSeq 꺼내기
-		const res = await boardApi.update(id, { category, title, content });
+		const res = await boardApi.update(id, { category, title, content, isSecret: secret ? 1 : 0 }); // 비밀글이면 1, 아니면 0
 		const boardSeq = res.data.boardSeq;
 
 		// 새 파일이 있을 때만 업로드
@@ -108,12 +172,12 @@ function BoardEdit() {
 		if (title !== post.title || content !== post.content) {
 			setIsCancelModal(true);
 		} else {
-			navigate(`/board/${id}`);
+			navigate(`/board/${id}`, { state: { verified: isVerified } });
 		}
 	};
 
 	const handleConfirmCancel = () => {
-		navigate(`/board/${id}`);
+		navigate(`/board/${id}`, { state: { verified: isVerified } });
 	};
 
 	return (
@@ -124,6 +188,25 @@ function BoardEdit() {
 
 			<form className="board_form" onSubmit={handleSubmit}>
 				<div className="form_group">
+					<div className='board_form__title'>
+						<label htmlFor="secret">비밀글 여부</label>
+					</div>
+					<div className='board_form__content'>
+						<input
+							type="checkbox"
+							name="secret"
+							id="secret"
+							className="input_check"
+							checked={secret}
+							onChange={(e) => {
+								setSecret(e.target.checked) // 비밀글 여부 — true/false
+								setCategory(e.target.checked ? 'secret' : 'general') // 카테고리 변경 → 목록에서 board_info__label에 '비밀글' 표시하기 위해
+							}}
+						/>
+					</div>
+				</div>
+
+				<div className="form_group">
 					<div className="board_form__title">
 						<label htmlFor="category">카테고리</label>
 					</div>
@@ -133,6 +216,7 @@ function BoardEdit() {
 							className="select"
 							value={category}
 							onChange={(e) => setCategory(e.target.value)}
+							disabled={secret} // 비밀글 체크 시 카테고리 변경 불가
 						>
 							{CATEGORY_OPTIONS.filter((opt) => opt.value !== 'notice' || isAdmin()).map((opt) => (
 								<option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -179,7 +263,9 @@ function BoardEdit() {
 								{existingFiles.map((file) => (
 									<li key={file.fileSeq} className="file_list_item">
 										<span className="file_name">{file.originalName}</span>
-										<button type="button" className="btn_file_del" onClick={() => handleExistingFileRemove(file.fileSeq)}>×</button>
+										<button type="button" className="btn_file_del" onClick={() => handleExistingFileRemove(file.fileSeq)}>
+											<MdCancel />
+										</button>
 									</li>
 								))}
 							</ul>

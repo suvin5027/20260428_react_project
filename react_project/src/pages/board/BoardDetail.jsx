@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { CATEGORY_LABEL } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
-import { MdAttachFile } from 'react-icons/md';
+import { MdAttachFile, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import { getCurrentUser } from '../../utils/authStorage';
+import authApi from '../../api/authApi';
 
 function BoardDetail() {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [post, setPost] = useState(null);
 	const [files, setFiles] = useState([]); // 첨부파일 목록
 	const [isDeleteModal, setIsDeleteModal] = useState(false);
+	// 비밀글 비밀번호 검증 관련 state
+	const [isVerified, setIsVerified] = useState(location.state?.verified || false); // 비밀번호 검증 통과 여부 (List에서 넘어온 경우 true)
+	const [passwordInput, setPasswordInput] = useState(''); // 입력한 비밀번호
+	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
+	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
+	const user = getCurrentUser(); // 현재 로그인 유저
 
 	useEffect(() => {
 		boardApi.getDetail(id)
@@ -51,6 +60,62 @@ function BoardDetail() {
 		);
 	}
 
+	// 본인 글 여부 / 관리자 여부 — 둘 중 하나면 수정·삭제 버튼 노출
+	const isOwner = user?.userSeq === post.userSeq;
+	const isAdmin = user?.userRole === 'ADMIN';
+	const canEdit = isOwner || isAdmin;
+
+	const isSecret = post.category === 'secret';
+	const needsPassword = isSecret && isOwner && !isVerified; // 비밀글 + 본인 + 아직 미검증
+
+	// 비밀글인데 관리자도 아니고 본인도 아니면 목록으로 redirect
+	if (isSecret && !isAdmin && !isOwner) {
+		navigate('/board');
+		return null;
+	}
+
+	// 비밀번호 검증 — 성공 시 열람 허용(isVerified), 실패 시 에러 메시지 표시
+	const handleVerifyPassword = async () => {
+		try{
+			await authApi.verifyPassword({ userId: user.userId, password: passwordInput });
+			setIsVerified(true);
+		} catch {
+			setPasswordError("비밀번호가 틀렸습니다.")
+		}
+	};
+
+	// 비밀글 + 본인 + 미검증이면 비밀번호 폼만 표시 (제목/본문/버튼 전부 숨김)
+	if (needsPassword) {
+		return (
+			<div className="board_container board_detail_container">
+				<div className="detail_password_box">
+					<h6>비밀번호를 입력하세요.</h6>
+					{/* 비밀번호 input + 눈 아이콘 토글 */}
+					<div className="input_form_group">
+						<input
+							type={showPassword ? 'text' : 'password'}
+							name="modalInput"
+							id="modalInput"
+							className="input_password"
+							autoComplete="new-password"
+							value={passwordInput}
+							onChange={(e) => setPasswordInput(e.target.value)}
+							onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+						/>
+						<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+							{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+						</button>
+					</div>
+					{passwordError && <p className="form_error">{passwordError}</p>}
+					<div className="popup_box_ft">
+						<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
+						<button type="button" className="btn btn_cancel" onClick={() => navigate('/board')}>취소</button>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	const handleDelete = async () => {
 		await boardApi.delete(id);
 		navigate('/board');
@@ -72,11 +137,9 @@ function BoardDetail() {
 
 			{/* 본문 — dangerouslySetInnerHTML: TipTap이 저장한 HTML을 그대로 렌더링 */}
 			<div className="board_detail_body">
-				{/* dangerouslySetInnerHTML: TipTap이 저장한 HTML을 그대로 렌더링 */}
 				<div dangerouslySetInnerHTML={{ __html: post.content }} />
 			</div>
 
-			{/* 첨부파일 */}
 			{files.length > 0 && (
 				<div className="board_detail_footer">
 					<h6 className="file_title">첨부파일 다운로드</h6>
@@ -96,12 +159,13 @@ function BoardDetail() {
 			{/* 하단 버튼 */}
 			<div className="board_ft_wrap board_detail_ft">
 				<Link to="/board" className="btn btn_list">목록</Link>
-				<div className="board_btn_wrap">
-					<Link to={`/board/${id}/edit`} className="btn btn_edit">수정</Link>
-					<button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>
-				</div>
+				{canEdit && (
+					<div className="board_btn_wrap">
+						<Link to={`/board/${id}/edit`} state={{ verified: isVerified }} className="btn btn_edit">수정</Link>
+						<button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>
+					</div>
+				)}
 			</div>
-
 			{isDeleteModal && (
 				<Modal
 					onConfirm={handleDelete}

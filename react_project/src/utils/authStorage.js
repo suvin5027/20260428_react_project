@@ -1,7 +1,8 @@
 const CURRENT_KEY = 'auth_user';
-const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24시간 (ms)
+// const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24시간 (ms)
+const SESSION_DURATION = 12 * 60 * 60 * 1000; // 12시간 (ms)
 
-// 현재 로그인한 사용자 반환 (없거나 24시간 경과 시 null)
+// 현재 로그인한 사용자 반환 (없거나 12시간 경과 시 null)
 export function getCurrentUser() {
 	const data = localStorage.getItem(CURRENT_KEY);
 	if (!data) return null;
@@ -29,7 +30,7 @@ export function getLoginTime() {
 	return parsed.loginTime || null;
 }
 
-// 만료 시각 반환 (loginTime + 24시간, timestamp)
+// 만료 시각 반환 (loginTime + 12시간, timestamp)
 export function getExpireTime() {
 	const loginTime = getLoginTime();
 	return loginTime ? loginTime + SESSION_DURATION : null;

@@ -34,7 +34,7 @@
 	font-size: $font_size_sm;
 	font-family: inherit;
 	cursor: pointer;
-	transition: .2s;
+	transition: .3s;
 
 	&:hover, &:focus, &._on, &._active {
 		background: $color_primary;

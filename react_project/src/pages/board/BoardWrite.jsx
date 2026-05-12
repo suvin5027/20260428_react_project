@@ -17,6 +17,7 @@ function BoardWrite() {
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [category, setCategory] = useState('general');
+	const [secret, setSecret] = useState(false); // 비밀글 여부
 	const [files, setFiles] = useState([]); // 선택한 파일 목록
 	const [fileError, setFileError] = useState('');
 	const [errors, setErrors] = useState({ title: '', content: '' });
@@ -80,7 +81,7 @@ function BoardWrite() {
 		const user = getCurrentUser();
 
 		// 게시글 저장 후 응답에서 boardSeq 꺼내기
-		const res = await boardApi.create({ category, title, content, userSeq: user?.userSeq });
+		const res = await boardApi.create({ category, title, content, userSeq: user?.userSeq, isSecret: secret ? 1 : 0 }); // 비밀글이면 1, 아니면 0
 		const boardSeq = res.data.boardSeq;
 
 		// 파일이 있을 때만 업로드 (없으면 건너뜀)
@@ -112,6 +113,25 @@ function BoardWrite() {
 			<form className="board_form" onSubmit={handleSubmit}>
 				<div className="form_group">
 					<div className='board_form__title'>
+						<label htmlFor="secret">비밀글 여부</label>
+					</div>
+					<div className='board_form__content'>
+						<input
+							type="checkbox"
+							name="secret"
+							id="secret"
+							className="input_check"
+							checked={secret}
+							onChange={(e) => {
+								setSecret(e.target.checked) // 비밀글 여부 — true/false
+								setCategory(e.target.checked ? 'secret' : 'general') // 카테고리 변경 → 목록에서 board_info__label에 '비밀글' 표시하기 위해
+							}}
+						/>
+					</div>
+				</div>
+
+				<div className="form_group">
+					<div className='board_form__title'>
 						<label htmlFor="category">카테고리</label>
 					</div>
 					<div className='board_form__content'>
@@ -120,6 +140,7 @@ function BoardWrite() {
 							className="select"
 							value={category}
 							onChange={(e) => setCategory(e.target.value)}
+							disabled={secret} // 비밀글 체크 시 카테고리 변경 불가
 						>
 						{CATEGORY_OPTIONS.filter((opt) => opt.value !== 'notice' || isAdmin()).map((opt) => (
 							<option key={opt.value} value={opt.value}>{opt.label}</option>

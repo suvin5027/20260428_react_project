@@ -1,22 +1,31 @@
 // 외부 라이브러리
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { MdSearch, MdAttachFile } from 'react-icons/md';
+import { Link, useNavigate } from 'react-router-dom';
+import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility } from 'react-icons/md';
 
 // API / 상수
 import boardApi from '../../api/boardApi';
 import { PAGE_SIZE, CATEGORY_LABEL } from '../../constants';
+import { isAdmin, getCurrentUser } from '../../utils/authStorage';
+import authApi from '../../api/authApi';
 
 // 내부 컴포넌트
 import Pagination from '../../components/Pagination';
 
 function BoardList() {
+	const navigate = useNavigate();
 	const [posts, setPosts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchType, setSearchType] = useState('title');
 	const [searchText, setSearchText] = useState('');
 	const [isSearched, setIsSearched] = useState(false);
 	const searchInputRef = useRef(null);
+	// 비밀글 모달 관련 state
+	const [selectedPost, setSelectedPost] = useState(null); // 클릭한 비밀글 item
+	const [passwordInput, setPasswordInput] = useState(''); // 입력한 비밀번호
+	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
+	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
+	const user = getCurrentUser(); // 현재 로그인 유저
 
 	// API 호출 — 검색 파라미터 없으면 전체 목록
 	const fetchPosts = async (params = {}) => {
@@ -45,6 +54,27 @@ function BoardList() {
 		el.addEventListener('search', handleClear);
 		return () => el.removeEventListener('search', handleClear);
 	}, []);
+
+	// 비밀글 클릭 — 관리자는 바로 이동, 본인은 모달, 그 외는 차단
+	const handleSecretClick = (item) => {
+		if (isAdmin()) {
+			navigate(`/board/${item.boardSeq}`);
+		} else if (item.userSeq === user?.userSeq) {
+			setSelectedPost(item);
+		} else {
+			alert('열람 권한이 없습니다.');
+		}
+	};
+
+	// 비밀번호 검증 — 성공 시 게시글로 이동, 실패 시 에러 메시지 표시
+	const handleVerifyPassword = async () => {
+		try{
+			await authApi.verifyPassword({ userId: user.userId, password: passwordInput });
+			navigate(`/board/${selectedPost.boardSeq}`, { state: { verified: true } });
+		} catch {
+			setPasswordError("비밀번호가 틀렸습니다.")
+		}
+	};
 
 	// 검색 실행
 	const handleSearch = () => {
@@ -100,19 +130,79 @@ function BoardList() {
 				<ul className="board_wrap">
 					{currentList.map((item) => (
 						<li key={item.boardSeq} className='board_item'>
-							<Link to={`/board/${item.boardSeq}`} className='board_link' title={item.title}>
-								<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
-								<span className='board_info__title'>
-									{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
-									<span>{item.title}</span>
-								</span>
-								<div className='board_info'>
-									<span className='board_info__date'>{item.createdAt}</span>
-								</div>
-							</Link>
+							{item.category === 'secret' ? (
+								<button className='board_link' title={isAdmin() || item.userSeq === user?.userSeq ? item.title : "비밀글 입니다."} onClick={() => handleSecretClick(item)}>
+									<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
+									<span className='board_info__title'>
+										{/* 비밀글: 자물쇠 아이콘 + 관리자/본인이면 제목, 아니면 "비밀글 입니다." */}
+										<>
+											{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+											<MdLock />
+											<span className="board_info__cont">{isAdmin() || item.userSeq === user?.userSeq ? item.title : '비밀글 입니다.'}</span>
+										</>
+									</span>
+									<div className='board_info'>
+										<span className='board_info__user'>{item.author}</span>
+										<span className='board_info__date'>{item.createdAt}</span>
+									</div>
+								</button>
+							) : (
+								<Link to={`/board/${item.boardSeq}`} className='board_link' title={item.title}>
+									<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
+									<span className='board_info__title'>
+										{/* 비밀글: 자물쇠 아이콘 + 관리자면 제목, 아니면 "비밀글 입니다." */}
+										{item.category === 'secret' ? (
+											<>
+												{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+												<MdLock />
+												<span className="board_info__cont">{isAdmin() ? item.title : '비밀글 입니다.'}</span>
+											</>
+										) : (
+											<>
+												{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+												<span className="board_info__cont">{item.title}</span>
+											</>
+										)}
+									</span>
+									<div className='board_info'>
+										<span className='board_info__user'>{item.author}</span>
+										<span className='board_info__date'>{item.createdAt}</span>
+									</div>
+								</Link>
+							)}
 						</li>
 					))}
 				</ul>
+			)}
+
+			{/* 비밀번호 모달 — 비밀글 클릭 시 표시 */}
+			{selectedPost && (
+				<div className="popup_overlay">
+					<div className="popup_box">
+						<h6>비밀번호를 입력하세요.</h6>
+						{/* 비밀번호 input + 눈 아이콘 토글 */}
+						<div className="input_form_group">
+							<input
+								type={showPassword ? 'text' : 'password'}
+								name="modalInput"
+								id="modalInput"
+								className="input_password"
+								autoComplete="new-password"
+								value={passwordInput}
+								onChange={(e) => setPasswordInput(e.target.value)}
+								onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+							/>
+							<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? <MdVisibilityOff /> : <MdVisibility /> }
+							</button>
+						</div>
+						{passwordError && <p className="form_error">{passwordError}</p>}
+						<div className="popup_box_ft">
+							<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
+							<button type="button" className="btn btn_cancel" onClick={() => { setSelectedPost(null); setPasswordInput(''); setPasswordError(''); setShowPassword(false); }}>취소</button>
+						</div>
+					</div>
+				</div>
 			)}
 
 			{/* 페이지네이션 — 게시글 없으면 숨김 */}

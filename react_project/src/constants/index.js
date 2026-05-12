@@ -41,6 +41,7 @@ export const CATEGORY_LABEL = {
 	notice: '공지사항',
 	general: '일반글',
 	question: '질문글',
+	secret: '비밀글',
 };
 
 // 게시글 카테고리 select 옵션 목록
