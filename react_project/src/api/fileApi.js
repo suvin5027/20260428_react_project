@@ -12,6 +12,14 @@ const fileApi = {
 	getFiles: (boardSeq) => instance.get(`/api/files/${boardSeq}`),
 	download: (fileSeq) => instance.get(`/api/files/download/${fileSeq}`, { responseType: 'blob' }),
 	delete: (fileSeq) => instance.delete(`/api/files/${fileSeq}`),
+	// 에디터 이미지 업로드 — 서버에 저장 후 접근 URL 반환
+	uploadImage: (file) => {
+		const formData = new FormData();
+		formData.append('image', file);
+		return instance.post('/api/files/image', formData, {
+			headers: { 'Content-Type': 'multipart/form-data' },
+		});
+	},
 };
 
 export default fileApi;

@@ -1,7 +1,7 @@
 // 외부 라이브러리
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility } from 'react-icons/md';
+import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility, MdFavorite } from 'react-icons/md';
 
 // API / 상수
 import boardApi from '../../api/boardApi';
@@ -161,14 +161,15 @@ function BoardList() {
 									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
-										{/* API에서 내려오는 viewCount 값 표시 */}
+										<span className='board_info__like'><MdFavorite /> {formatViewCount(item.likeCount ?? 0)}</span>
 										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</button>
 							) : (
 								<Link to={`/board/${item.boardSeq}`} className='board_link' title={item.title}>
 									<div className="board_title_wrap">
-										<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
+										{/* 좋아요 10개 이상 + 공지/비밀 제외 시 _popular 클래스로 배경 노란색 */}
+										<span className={`board_info__label _${item.category}${item.likeCount >= 10 && item.category !== 'notice' ? ' _popular' : ''}`}>{CATEGORY_LABEL[item.category]}</span>
 										<span className='board_info__title'>
 											{/* 비밀글: 자물쇠 아이콘 + 관리자면 제목, 아니면 "비밀글 입니다." */}
 											{item.category === 'secret' ? (
@@ -188,7 +189,7 @@ function BoardList() {
 									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
-										{/* API에서 내려오는 viewCount 값 표시 */}
+										<span className='board_info__like'><MdFavorite /> {formatViewCount(item.likeCount ?? 0)}</span>
 										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</Link>

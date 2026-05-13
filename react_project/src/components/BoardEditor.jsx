@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import fileApi from '../api/fileApi';
 
 // props: value(초기 내용), onChange(내용 바뀔 때 실행할 함수)
 function BoardEditor({ value, onChange }) {
@@ -16,20 +17,14 @@ function BoardEditor({ value, onChange }) {
 		},
 	});
 
-	// 이미지 파일 선택 시 실행
-	const handleImageUpload = (e) => {
+	// 이미지 파일 선택 시 — 서버에 업로드 후 반환된 URL을 에디터에 삽입
+	const handleImageUpload = async (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
 
-		// 임시: 브라우저 메모리에 올려서 미리보기 URL 생성 (새로고침하면 사라짐)
-		// TODO API 연동 시 교체:
-		/*
-		const formData = new FormData();
-		formData.append('image', file);
-		const res = await boardApi.uploadImage(formData);	// POST /boards/image
-		const url = res.data.url;
-		*/
-		const url = URL.createObjectURL(file);
+		const res = await fileApi.uploadImage(file);
+		const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+		const url = `${baseURL}${res.data.url}`;
 
 		editor.chain().focus().setImage({ src: url }).run();
 

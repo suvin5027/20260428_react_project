@@ -98,10 +98,13 @@
 		background: $color_blue_bg;
 		color: $color_blue;
 	}
+	&._popular{
+		background: $color_popular_bg;
+	}
 }
 .board_info__title{
 	flex: 1;
-	max-width: 1560px;
+	max-width: 1510px;
 	min-width: 0;
 	display: flex;
 	align-items: center;
@@ -121,12 +124,28 @@
 	font-size: 14px;
 }
 .board_info_wrap{
-	flex: 0 230px;
+	flex: 0 280px;
 	display: flex;
 	align-items: center;
 	gap: 5px;
 	min-width: 140px;
 	font-size: $font_size_sm;
+}
+.board_info__like{
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px;
+	gap: 2px;
+	flex-shrink: 0;
+	color: $color_999;
+	font-size: $font_size_x;
+	line-height: 1;
+
+	svg{
+		color: $color_red;
+		font-size: 11px;
+	}
 }
 @media (max-width: 1280px) {
 	.board_info_wrap{
@@ -246,6 +265,17 @@
 // ============================================================
 // 게시글 상세
 // ============================================================
+// 전체를 고정 높이 flex column으로 — 본문이 남은 공간 자동 채움
+.board_detail_container{
+	display: flex;
+	flex-direction: column;
+	height: 794px;
+}
+@media (max-width: 1280px) {
+	.board_detail_container{
+		height: auto;
+	}
+}
 
 // 상단: 제목 + 메타 정보
 .board_detail_hd{
@@ -266,6 +296,10 @@
 			min-width: 60px;
 		}
 	}
+
+	.board_info__title{
+		max-width: initial;
+	}
 }
 .board_detail_meta{
 	display: flex;
@@ -275,11 +309,11 @@
 	color: $color_999;
 }
 
-// 본문
+// 본문 — flex: 1로 container 내 남은 공간 자동 채움 (제목 줄 수 무관하게 일정한 전체 높이 유지)
 .board_detail_body{
+	flex: 1;
+	min-height: 0;
 	width: 100%;
-	min-height: 586px;
-	max-height: 586px;
 	line-height: 1.7;
 	padding: 24px 5px;
 	font-size: $font_size_base;
@@ -288,18 +322,16 @@
 	// reset으로 제거된 목록 스타일 복구 (에디터에서 작성한 ul/ol이 상세에서도 보이도록)
 	ul{ list-style: disc; padding-left: 20px; }
 	ol{ list-style: decimal; padding-left: 20px; }
-}
-// 첨부파일 영역이 있으면 본문 높이 축소
-.board_detail_container:has(.board_detail_footer) .board_detail_body{
-	min-height: 455px;
-	max-height: 455px;
+	// reset이 p margin을 0으로 만들어 빈 줄(<p></p>)이 높이 0이 되는 문제 방지
+	p{ min-height: 1.7em; }
+	// reset이 font: inherit 적용해서 사라지는 스타일 복구
+	em{ font-style: italic; }
+	strong{ font-weight: bold; }
+	s{ text-decoration: line-through; }
 }
 @media (max-width: 1280px) {
 	.board_detail_body{
-		min-height: 200px;
-		max-height: 200px;
-	}
-	.board_detail_container:has(.board_detail_footer) .board_detail_body{
+		flex: none;
 		min-height: 200px;
 		max-height: 200px;
 	}
@@ -492,15 +524,19 @@
 }
 // EditorContent 내부 ProseMirror 영역
 .board_editor .ProseMirror{
-	min-height: 200px;
+	min-height: 360px;
+	max-height: 360px;
+	line-height: 1.7;
 	padding: 12px;
 	font-size: $font_size_sm;
-	line-height: 1.7;
+	overflow-y: auto;
 	outline: none;
 
 	// reset이 em/i에 font: inherit 적용해서 italic이 사라지므로 복구
 	em{ font-style: italic; }
 	strong{ font-weight: bold; }
+	s{ text-decoration: line-through; }
+	p{ min-height: 1.7em; }
 
 	// 목록 스타일
 	ul{ list-style: disc; padding-left: 20px; }
