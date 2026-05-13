@@ -11,12 +11,14 @@
 	background: $color_white;
 	border-bottom: 1px solid $color_gray_border;
 }
-@media (max-width: 640px) {
+@media (max-width: 1280px) {
 	.header_container{
 		display: flex;
 		align-items: center;
 		flex-direction: column;
+		gap: 10px;
 		height: initial;
+		padding: 10px 20px;
 	}
 }
 // 로고
@@ -26,7 +28,7 @@
 	font-weight: bold;
 	color: $color_primary;
 }
-@media (max-width: 640px) {
+@media (max-width: 1280px) {
 	.header_logo{
 		display: flex;
 		align-items: center;
@@ -40,10 +42,10 @@
 	gap: 20px;
 	@include mr(730);
 }
-@media (max-width: 640px) {
+@media (max-width: 1280px) {
 	.header_menu{
-		width: 400px;
-	@include mr(0);
+		width: 100%;
+		@include mr(0);
 	}
 }
 

@@ -27,9 +27,20 @@
 		padding: 20px;
 	}
 }
+@media (max-width: 1280px) {
+	.main_container{
+		height: initial;
+	}
+}
 // 로그인 페이지가 아니면 본문 높이 축소
 .wrap:has(.header_container) .main_container{
 	height: calc(100vh - 78px);
+}
+@media (max-width: 1280px) {
+	// 로그인 페이지가 아니면 본문 높이 축소
+	.wrap:has(.header_container) .main_container{
+		height: initial;
+	}
 }
 
 // 페이지 헤더 (타이틀 + 버튼 영역)

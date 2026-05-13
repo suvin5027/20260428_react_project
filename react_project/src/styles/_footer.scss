@@ -12,3 +12,8 @@
 	font-size: $font_size_sm;
 	color: $color_white;
 }
+@media (max-width: 1280px) {
+	.footer_container{
+		display: none;
+	}
+}

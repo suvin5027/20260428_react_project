@@ -23,6 +23,11 @@
 	border-top: 2px solid $color_black;
 	border-bottom: 1px solid $color_black;
 }
+@media (max-width: 1280px) {
+	.board_wrap{
+		min-height: initial;
+	}
+}
 .board_item{
 	display: flex;
 	justify-content: space-between;
@@ -47,6 +52,27 @@
 
 	&:hover{
 		background-color: $color_blue_bg;
+	}
+}
+@media (max-width: 1280px) {
+	.board_link{
+		flex-direction: column;
+		justify-content: flex-start;
+		width: 100%;
+		padding: 5px;
+	}
+}
+.board_title_wrap{
+	flex: 1 1;
+	display: flex;
+	align-items: center;
+	gap: 0px 10px;
+	width: 88%;
+}
+@media (max-width: 1280px) {
+	.board_title_wrap{
+		flex: initial;
+		width: 100%;
 	}
 }
 .board_info__label{
@@ -75,14 +101,15 @@
 }
 .board_info__title{
 	flex: 1;
+	min-width: 0;
 	display: flex;
 	align-items: center;
 	gap: 4px;
-	width: 80%;
 	font-size: $font_size_sm;
 
 	.board_info__cont {
-		width: 100%;
+		flex: 1;      // 아이콘 제외한 나머지 공간 자동으로 채움
+		min-width: 0; // flex 안에서 텍스트 overflow가 제대로 동작하려면 필수
 		@include ellipse_1;
 		text-align: left;
 	}
@@ -92,7 +119,8 @@
 	color: $color_blue;
 	font-size: 14px;
 }
-.board_info{
+.board_info_wrap{
+	flex: 0 160px;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -100,10 +128,24 @@
 	min-width: 140px;
 	font-size: $font_size_sm;
 }
+@media (max-width: 1280px) {
+	.board_info_wrap{
+		flex: initial;
+		justify-content: flex-start;
+		min-width: initial;
+		width: 100%;
+	}
+}
 .board_info__user{
 	width: 60px;
 	@include ellipse_1;
 	text-align: center;
+}
+@media (max-width: 1280px) {
+	.board_info__user{
+		width: initial;
+		max-width: 100px;
+	}
 }
 
 // 검색
@@ -112,6 +154,11 @@
 	justify-content: center;
 	gap: 5px;
 	@include mb(15);
+}
+@media (max-width: 1280px) {
+	.search_wrap{
+		width: 100%;
+	}
 }
 .search_select{
 	padding: 5px 8px;
@@ -126,6 +173,11 @@
 	align-items: center;
 	gap: 5px;
 }
+@media (max-width: 1280px) {
+	.search_form_group{
+		width: 100%;
+	}
+}
 .search_input{
 	width: 260px;
 	padding: 6px 10px;
@@ -136,6 +188,11 @@
 	&:focus{
 		outline: none;
 		border-color: $color_blue;
+	}
+}
+@media (max-width: 1280px) {
+	.search_input{
+		width: 100%;
 	}
 }
 .btn_search{
@@ -186,7 +243,7 @@
 
 	.board_title{
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		gap: 10px;
 		padding: 16px 5px 10px;
 		font-size: $font_size_h5;
@@ -194,14 +251,6 @@
 
 		.board_info__label{
 			min-width: 60px;
-		}
-
-		.board_info__title{
-			width: 94%;
-			// 상세 페이지는 전체 제목을 보여줘야 하므로 ellipse 해제
-			white-space: normal;
-			overflow: visible;
-			text-overflow: unset;
 		}
 	}
 }
@@ -284,6 +333,21 @@
 
 		.board_form__content{
 			width: 100%;
+		}
+	}
+}
+@media (max-width: 1280px) {
+	.board_form{
+		.form_group{
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			gap: 5px;
+
+			.board_form__title{
+				min-width: initial;
+			}
+
 		}
 	}
 }
