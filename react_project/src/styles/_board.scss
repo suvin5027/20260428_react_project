@@ -278,23 +278,30 @@
 // 본문
 .board_detail_body{
 	width: 100%;
-	min-height: 655px;
+	min-height: 586px;
+	max-height: 586px;
 	line-height: 1.7;
-	border-bottom: 1px solid $color_ddd;
 	padding: 24px 5px;
 	font-size: $font_size_base;
 	overflow-y: auto;
+
+	// reset으로 제거된 목록 스타일 복구 (에디터에서 작성한 ul/ol이 상세에서도 보이도록)
+	ul{ list-style: disc; padding-left: 20px; }
+	ol{ list-style: decimal; padding-left: 20px; }
 }
 // 첨부파일 영역이 있으면 본문 높이 축소
 .board_detail_container:has(.board_detail_footer) .board_detail_body{
-	min-height: 524px;
+	min-height: 455px;
+	max-height: 455px;
 }
 @media (max-width: 1280px) {
 	.board_detail_body{
 		min-height: 200px;
+		max-height: 200px;
 	}
 	.board_detail_container:has(.board_detail_footer) .board_detail_body{
 		min-height: 200px;
+		max-height: 200px;
 	}
 }
 
@@ -332,6 +339,58 @@
 .file_name{
 	font-size: $font_size_sm;
 	color: $color_dark;
+}
+
+// 좋아요 + 즐겨찾기 버튼 영역
+.board_reaction_wrap{
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	padding: 20px;
+	border-top: 1px solid $color_ddd;
+	border-bottom: 1px solid $color_ddd;
+}
+.btn_reaction{
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 7px 18px;
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-pill;
+	background: $color_white;
+	color: $color_999;
+	font-size: $font_size_sm;
+	cursor: pointer;
+	transition: border-color .2s, color .2s, background .2s;
+
+	svg{
+		font-size: 16px;
+	}
+}
+.btn_like{
+	&:hover:not(:disabled){
+		border-color: $color_red;
+		color: $color_red;
+	}
+	&._on,
+	&:disabled{
+		border-color: $color_red;
+		color: $color_red;
+		background: $color_red_bg;
+		cursor: not-allowed;
+	}
+}
+.btn_bookmark{
+	&:hover{
+		border-color: $color_yellow;
+		color: $color_yellow;
+	}
+	&._on{
+		border-color: $color_yellow;
+		color: $color_yellow;
+		background: $color_yellow_bg;
+	}
 }
 
 // 하단 버튼 영역
