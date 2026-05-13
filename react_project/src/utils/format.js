@@ -21,6 +21,12 @@ export function formatLoginTime(timestamp) {
 	return `${yyyy}/${mm}/${dd} ${hh}:${min}:${ss}`;
 }
 
+// 조회수 포맷 (9,999 이하는 콤마 표시, 10,000 이상은 9,999+)
+export function formatViewCount(count) {
+	if (count > 9999) return '9,999+';
+	return count.toLocaleString();
+}
+
 // 텍스트 말줄임 (지정 길이 초과 시 ... 처리)
 export function truncate(str, length = 50) {
 	if (!str) return '';

@@ -101,6 +101,7 @@
 }
 .board_info__title{
 	flex: 1;
+	max-width: 1560px;
 	min-width: 0;
 	display: flex;
 	align-items: center;
@@ -120,10 +121,9 @@
 	font-size: 14px;
 }
 .board_info_wrap{
-	flex: 0 160px;
+	flex: 0 230px;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
 	gap: 5px;
 	min-width: 140px;
 	font-size: $font_size_sm;
@@ -145,6 +145,19 @@
 	.board_info__user{
 		width: initial;
 		max-width: 100px;
+	}
+}
+.board_info__view{
+	flex: 1;
+	min-width: 0px;
+	line-height: 1;
+	color: $color_999;
+	font-size: $font_size_x;
+	text-align: center;
+}
+@media (max-width: 1280px) {
+	.board_info__view{
+		flex: none;
 	}
 }
 
@@ -276,6 +289,14 @@
 .board_detail_container:has(.board_detail_footer) .board_detail_body{
 	min-height: 524px;
 }
+@media (max-width: 1280px) {
+	.board_detail_body{
+		min-height: 200px;
+	}
+	.board_detail_container:has(.board_detail_footer) .board_detail_body{
+		min-height: 200px;
+	}
+}
 
 // 첨부파일 (상세 페이지)
 .board_detail_footer{
@@ -296,6 +317,12 @@
 	max-height: 80px;
 	margin-top: 6px;
 	overflow-y: auto;
+}
+@media (max-width: 1280px) {
+	.file_list{
+		min-height: 40px;
+		max-height: 40px;
+	}
 }
 .file_list_item{
 	display: flex;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { CATEGORY_LABEL } from '../../constants';
@@ -21,13 +21,28 @@ function BoardDetail() {
 	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
 	const user = getCurrentUser(); // 현재 로그인 유저
+	// StrictMode 개발 환경에서 useEffect가 2번 실행되는 것을 막기 위해 ref로 한 번만 호출
+	const viewCountCalled = useRef(false);
 
 	useEffect(() => {
-		boardApi.getDetail(id)
-			.then((res) => setPost(res.data))
-			.catch(() => setPost(null));
-		fileApi.getFiles(id)
-			.then((res) => setFiles(res.data));
+		const load = async () => {
+			// viewCountCalled: React StrictMode는 개발 환경에서 useEffect를 2번 실행한다.
+			// ref는 리렌더링과 관계없이 값이 유지되므로, 플래그로 써서 최초 1번만 실행되도록 막는다.
+			if (!viewCountCalled.current) {
+				viewCountCalled.current = true;
+				// await로 increment가 DB에 반영될 때까지 기다린다.
+				// await 없이 동시에 호출하면 getDetail이 먼저 응답을 받아
+				// DB에 반영되기 전의 조회수(증가 전 값)를 화면에 표시하게 된다.
+				await boardApi.incrementViewCount(id);
+			}
+			// increment 완료 후 getDetail을 호출해야 증가된 조회수가 화면에 표시된다.
+			boardApi.getDetail(id)
+				.then((res) => setPost(res.data))
+				.catch(() => setPost(null));
+			fileApi.getFiles(id)
+				.then((res) => setFiles(res.data));
+		};
+		load();
 	}, [id]);
 
 	// 다운로드 버튼 클릭 시 — blob을 받아서 <a> 태그로 파일 저장
@@ -132,6 +147,8 @@ function BoardDetail() {
 				<div className="board_detail_meta">
 					<span className="board_detail_author">{post.author}</span>
 					<span className="board_detail_date">{post.createdAt}</span>
+					{/* API에서 내려오는 viewCount 값 표시 */}
+					<span className="board_detail_view">조회 {post.viewCount.toLocaleString()}</span>
 				</div>
 			</div>
 

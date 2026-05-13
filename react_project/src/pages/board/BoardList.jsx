@@ -8,6 +8,7 @@ import boardApi from '../../api/boardApi';
 import { PAGE_SIZE, CATEGORY_LABEL } from '../../constants';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { isAdmin, getCurrentUser } from '../../utils/authStorage';
+import { formatViewCount } from '../../utils/format';
 import authApi from '../../api/authApi';
 
 // 내부 컴포넌트
@@ -160,6 +161,8 @@ function BoardList() {
 									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
+										{/* API에서 내려오는 viewCount 값 표시 */}
+										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</button>
 							) : (
@@ -185,6 +188,8 @@ function BoardList() {
 									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
+										{/* API에서 내려오는 viewCount 값 표시 */}
+										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</Link>
 							)}
