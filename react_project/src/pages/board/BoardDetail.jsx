@@ -4,14 +4,19 @@ import Modal from '../../components/Modal';
 import { CATEGORY_LABEL } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
-import { MdAttachFile, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import likeApi from '../../api/likeApi';
+import { MdAttachFile, MdVisibility, MdVisibilityOff, MdFavorite, MdFavoriteBorder, MdBookmarkBorder } from 'react-icons/md';
 import { getCurrentUser } from '../../utils/authStorage';
 import authApi from '../../api/authApi';
 
 function BoardDetail() {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const user = getCurrentUser(); // 현재 로그인 유저
 	const location = useLocation();
+	// StrictMode 개발 환경에서 useEffect가 2번 실행되는 것을 막기 위해 ref로 한 번만 호출
+	const viewCountCalled = useRef(false);
+
 	const [post, setPost] = useState(null);
 	const [files, setFiles] = useState([]); // 첨부파일 목록
 	const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -20,9 +25,9 @@ function BoardDetail() {
 	const [passwordInput, setPasswordInput] = useState(''); // 입력한 비밀번호
 	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
-	const user = getCurrentUser(); // 현재 로그인 유저
-	// StrictMode 개발 환경에서 useEffect가 2번 실행되는 것을 막기 위해 ref로 한 번만 호출
-	const viewCountCalled = useRef(false);
+	const [likeCount, setLikeCount] = useState(0); // 좋아요 수
+	const [isLiked, setIsLiked] = useState(false); // 현재 유저 좋아요 여부
+
 
 	useEffect(() => {
 		const load = async () => {
@@ -41,6 +46,11 @@ function BoardDetail() {
 				.catch(() => setPost(null));
 			fileApi.getFiles(id)
 				.then((res) => setFiles(res.data));
+			likeApi.getStatus(id, user.userSeq)
+				.then((res) => {
+					setLikeCount(res.data.likeCount);
+					setIsLiked(res.data.liked);
+				});
 		};
 		load();
 	}, [id]);
@@ -131,6 +141,13 @@ function BoardDetail() {
 		);
 	}
 
+	// 좋아요 등록 — 하루 1회, 오늘 이미 눌렀으면 서버에서 무시하고 현재 상태 반환
+	const handleLike = async () => {
+		const res = await likeApi.toggle(id, user.userSeq);
+		setLikeCount(res.data.likeCount);
+		setIsLiked(res.data.liked);
+	};
+
 	const handleDelete = async () => {
 		await boardApi.delete(id);
 		navigate('/board');
@@ -155,6 +172,19 @@ function BoardDetail() {
 			{/* 본문 — dangerouslySetInnerHTML: TipTap이 저장한 HTML을 그대로 렌더링 */}
 			<div className="board_detail_body">
 				<div dangerouslySetInnerHTML={{ __html: post.content }} />
+			</div>
+
+			{/* 좋아요 + 즐겨찾기 버튼 영역 */}
+			<div className="board_reaction_wrap">
+				{/* isLiked: 오늘 이미 눌렀으면 disabled — 클릭 막히고 cursor: not-allowed */}
+				<button type="button" className={`btn_reaction btn_like${isLiked ? ' _on' : ''}`} onClick={handleLike} disabled={isLiked}>
+					{isLiked ? <MdFavorite /> : <MdFavoriteBorder />}
+					<span>좋아요 {likeCount}</span>
+				</button>
+				<button type="button" className="btn_reaction btn_bookmark">
+					<MdBookmarkBorder />
+					<span>즐겨찾기</span>
+				</button>
 			</div>
 
 			{files.length > 0 && (
