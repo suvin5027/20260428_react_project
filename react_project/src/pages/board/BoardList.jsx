@@ -6,6 +6,7 @@ import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility } from 'r
 // API / 상수
 import boardApi from '../../api/boardApi';
 import { PAGE_SIZE, CATEGORY_LABEL } from '../../constants';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { isAdmin, getCurrentUser } from '../../utils/authStorage';
 import authApi from '../../api/authApi';
 
@@ -13,19 +14,32 @@ import authApi from '../../api/authApi';
 import Pagination from '../../components/Pagination';
 
 function BoardList() {
+	// navigate: react-router-dom의 페이지 이동 함수 (Link 대신 JS 코드로 이동할 때 사용)
 	const navigate = useNavigate();
+	// getCurrentUser: localStorage에서 현재 로그인한 유저 정보를 가져오는 유틸 함수
+	const user = getCurrentUser();
+
+	// 게시판 목록 관련 state
 	const [posts, setPosts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchType, setSearchType] = useState('title');
 	const [searchText, setSearchText] = useState('');
 	const [isSearched, setIsSearched] = useState(false);
 	const searchInputRef = useRef(null);
+
 	// 비밀글 모달 관련 state
 	const [selectedPost, setSelectedPost] = useState(null); // 클릭한 비밀글 item
 	const [passwordInput, setPasswordInput] = useState(''); // 입력한 비밀번호
 	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
-	const user = getCurrentUser(); // 현재 로그인 유저
+
+	// 반응형 관련 — 1280px 이하 모바일/태블릿이면 페이지당 10개, 데스크탑이면 15개
+	const isMobile = useIsMobile();
+	const pageSize = isMobile ? 10 : PAGE_SIZE;
+
+
+
+
 
 	// API 호출 — 검색 파라미터 없으면 전체 목록
 	const fetchPosts = async (params = {}) => {
@@ -87,8 +101,8 @@ function BoardList() {
 		}
 	};
 
-	const totalPages = Math.ceil(posts.length / PAGE_SIZE);
-	const currentList = posts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+	const totalPages = Math.ceil(posts.length / pageSize);
+	const currentList = posts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
 	return (
 		<div className="board_container board_list_container">
@@ -132,39 +146,43 @@ function BoardList() {
 						<li key={item.boardSeq} className='board_item'>
 							{item.category === 'secret' ? (
 								<button className='board_link' title={isAdmin() || item.userSeq === user?.userSeq ? item.title : "비밀글 입니다."} onClick={() => handleSecretClick(item)}>
-									<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
-									<span className='board_info__title'>
-										{/* 비밀글: 자물쇠 아이콘 + 관리자/본인이면 제목, 아니면 "비밀글 입니다." */}
-										<>
-											{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
-											<MdLock />
-											<span className="board_info__cont">{isAdmin() || item.userSeq === user?.userSeq ? item.title : '비밀글 입니다.'}</span>
-										</>
-									</span>
-									<div className='board_info'>
+									<div className="board_title_wrap">
+										<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
+										<span className='board_info__title'>
+											{/* 비밀글: 자물쇠 아이콘 + 관리자/본인이면 제목, 아니면 "비밀글 입니다." */}
+											<>
+												{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+												<MdLock />
+												<span className="board_info__cont">{isAdmin() || item.userSeq === user?.userSeq ? item.title : '비밀글 입니다.'}</span>
+											</>
+										</span>
+									</div>
+									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
 									</div>
 								</button>
 							) : (
 								<Link to={`/board/${item.boardSeq}`} className='board_link' title={item.title}>
-									<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
-									<span className='board_info__title'>
-										{/* 비밀글: 자물쇠 아이콘 + 관리자면 제목, 아니면 "비밀글 입니다." */}
-										{item.category === 'secret' ? (
-											<>
-												{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
-												<MdLock />
-												<span className="board_info__cont">{isAdmin() ? item.title : '비밀글 입니다.'}</span>
-											</>
-										) : (
-											<>
-												{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
-												<span className="board_info__cont">{item.title}</span>
-											</>
-										)}
-									</span>
-									<div className='board_info'>
+									<div className="board_title_wrap">
+										<span className={`board_info__label _${item.category}`}>{CATEGORY_LABEL[item.category]}</span>
+										<span className='board_info__title'>
+											{/* 비밀글: 자물쇠 아이콘 + 관리자면 제목, 아니면 "비밀글 입니다." */}
+											{item.category === 'secret' ? (
+												<>
+													{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+													<MdLock />
+													<span className="board_info__cont">{isAdmin() ? item.title : '비밀글 입니다.'}</span>
+												</>
+											) : (
+												<>
+													{item.hasAttachment === 1 && <MdAttachFile className="icon_attach" />}
+													<span className="board_info__cont">{item.title}</span>
+												</>
+											)}
+										</span>
+									</div>
+									<div className="board_info_wrap">
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
 									</div>
