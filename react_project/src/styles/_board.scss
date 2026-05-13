@@ -19,7 +19,7 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	min-height: 632px;
+	min-height: 639px;
 	border-top: 2px solid $color_black;
 	border-bottom: 1px solid $color_black;
 }
@@ -77,7 +77,7 @@
 }
 .board_info__label{
 	min-width: 60px;
-	padding: 3px 6px;
+	padding: 3.5px 6px;
 	border-radius: $border-radius-base;
 	font-size: $font_size_xs;
 	font-weight: bold;

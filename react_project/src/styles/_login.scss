@@ -106,6 +106,21 @@
 		}
 	}
 
+	// 아이디 찾기 결과
+	.login_find_result {
+		padding: 16px;
+		margin-bottom: 8px;
+		background: $color_blue_bg;
+		border-radius: $border-radius-base;
+		text-align: center;
+		font-size: $font_size_sm;
+
+		strong {
+			font-weight: bold;
+			color: $color_blue;
+		}
+	}
+
 	.login_register {
 		display: flex;
 		justify-content: center;
