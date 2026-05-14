@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
+// TODO: CommentList import 추가
+import CommentList from '../../components/CommentList';
 import { CATEGORY_LABEL } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
@@ -36,22 +38,33 @@ function BoardDetail() {
 	const bookmarkBtnRef = useRef(null); // 즐겨찾기 버튼 ref — DOM 직접 조작해 리렌더링 방지
 	const btnTopRef = useRef(null); // 맨 위로 버튼 ref — DOM 직접 조작해 리렌더링 방지
 
-	// 스크롤 1/5 넘으면 버튼에 _visible 클래스 직접 토글 (state 변경 없이 리렌더링 없음)
+	// 스크롤 1/5 넘으면 버튼 표시, 3초 가만히 있으면 자동 숨김
 	useEffect(() => {
 		let ticking = false;
+		let hideTimer = null;
 		const handleScroll = () => {
 			if (ticking) return;
 			ticking = true;
 			requestAnimationFrame(() => {
 				const scrollY = window.scrollY;
 				const total = document.documentElement.scrollHeight - window.innerHeight;
-				btnTopRef.current?.classList.toggle('_visible', scrollY > total / 5);
+				const shouldShow = scrollY > total / 5;
+				btnTopRef.current?.classList.toggle('_visible', shouldShow);
 				btnTopRef.current?.classList.toggle('_at_bottom', scrollY >= total - 50);
 				ticking = false;
+				clearTimeout(hideTimer);
+				if (shouldShow) {
+					hideTimer = setTimeout(() => {
+						btnTopRef.current?.classList.remove('_visible');
+					}, 3000);
+				}
 			});
 		};
 		window.addEventListener('scroll', handleScroll);
-		return () => window.removeEventListener('scroll', handleScroll);
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+			clearTimeout(hideTimer);
+		};
 	}, []);
 
 	const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -258,6 +271,18 @@ function BoardDetail() {
 				</button>
 			</div>
 
+
+			{/* TODO: 댓글 영역 — 좋아요/즐겨찾기 버튼 아래에 삽입
+					<CommentList
+						boardSeq={Number(id)}
+						boardAuthorSeq={post.userSeq}
+						user={user}
+					/> */}
+			<CommentList
+				boardSeq={Number(id)}
+				boboardAuthorSeq={post.userSeq}
+				user={user}
+			/>
 
 			{/* 하단 버튼 */}
 			<div className="board_ft_wrap board_detail_ft">

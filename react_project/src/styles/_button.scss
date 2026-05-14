@@ -188,7 +188,7 @@ button {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-	background: $color_999;
+	background: $color_ccc;
 	color: $color_white;
 	border: none;
 	cursor: pointer;
@@ -204,5 +204,12 @@ button {
 		pointer-events: auto;
 	}
 	&._at_bottom{ bottom: 40px; } // footer 위로 올라감
-	&:hover{ background: $color_777; }
+	&:hover{ background: $color_999; }
+}
+@media (max-width: 1280px) {
+	.btn_top{
+		bottom: 16px !important;
+		width: 34px;
+		height: 34px;
+	}
 }

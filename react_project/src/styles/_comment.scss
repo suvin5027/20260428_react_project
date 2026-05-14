@@ -1,0 +1,230 @@
+@use './variables' as *;
+
+// ============================================================
+// 댓글
+// ============================================================
+
+.comment_wrap {
+	width: 100%;
+	padding-top: 12px;
+}
+
+// 댓글 목록 컨테이너 — 네이버 블로그 스타일
+.comment_list_wrap {
+	border: 1px solid $color_efefef;
+	border-radius: $border-radius-base;
+	overflow: hidden;
+	margin-bottom: 12px;
+	background: $color_f5f5f5;
+
+	// 안에 있으므로 아래 구분선만 추가
+	.comment_count {
+		border-bottom: 1px solid $color_ddd;
+	}
+}
+
+// 댓글 수
+.comment_count {
+	font-size: $font_size_s;
+	font-weight: 600;
+	color: $color_111;
+	padding: 10px 14px;
+
+	span { color: $color_primary; }
+}
+
+// 댓글 목록
+.comment_list {
+	list-style: none;
+}
+
+// 댓글 아이템 — 구분선으로만 분리
+.comment_item {
+	padding: 12px 16px;
+	background: transparent;
+	border-bottom: 1px solid $color_ddd;
+
+	&:last-child { border-bottom: none; }
+	&:has(.comment_children) { padding-bottom: 0; }
+
+	// 삭제/비밀 댓글
+	&._masked > .comment_content {
+		color: $color_aaa;
+		font-style: italic;
+	}
+}
+
+// 댓글 헤더 (작성자 + 날짜 + 버튼)
+.comment_hd {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 6px;
+
+	.comment_author {
+		display: flex;
+		align-items: center;
+		gap: 3px;
+		font-size: $font_size_s;
+		font-weight: 700;
+		color: $color_333;
+
+		.icon_secret { font-size: 11px; color: $color_777; }
+	}
+
+	.comment_date {
+		font-size: $font_size_sm;
+		color: $color_aaa;
+	}
+
+	.comment_btn_wrap {
+		display: flex;
+		gap: 2px;
+	}
+
+	.btn_comment {
+		min-width: 36px;
+		border: none;
+		border-radius: $border-radius-base;
+		padding: 2px 6px;
+		font-size: $font_size_sm;
+		color: $color_aaa;
+		background: none;
+		transition: color .15s, background .15s;
+		cursor: pointer;
+
+		&:hover { color: $color_555; background: $color_ddd; }
+		&.btn_del:hover { color: $color_red; background: $color_red_bg; }
+	}
+}
+@media (max-width: 1280px) {
+	.comment_hd {
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+}
+
+// 댓글 본문
+.comment_content {
+	font-size: $font_size_s;
+	color: $color_555;
+	line-height: 1.65;
+	white-space: pre-wrap;
+}
+
+// 인라인 폼 (수정 / 답글)
+.comment_form {
+	margin-top: 10px;
+
+	textarea {
+		width: 100%;
+		min-height: 60px;
+		padding: 8px 10px;
+		border: 1px solid $color_gray_border;
+		border-radius: $border-radius-base;
+		background: $color_white;
+		font-size: $font_size_s;
+		font-family: inherit;
+		box-sizing: border-box;
+
+		&:focus { outline: none; border-color: $color_primary; }
+	}
+
+	.comment_form_ft {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 6px;
+
+		label {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			font-size: $font_size_sm;
+			color: $color_777;
+			cursor: pointer;
+		}
+
+		> div { display: flex; gap: 6px; }
+	}
+}
+
+// 대댓글 — └ 기호 + 연한 배경으로 구분
+.comment_children {
+	list-style: none;
+	padding-left: 16px;
+
+	.comment_item {
+		position: relative;
+		padding: 8px 16px 12px 26px;
+		background: $color_f5f5f5;
+		&:has(.comment_children) { padding-bottom: 0; }
+
+		&::before {
+			content: '└';
+			position: absolute;
+			left: 8px;
+			top: 12px;
+			color: $color_aaa;
+			font-size: 13px;
+			line-height: 1;
+		}
+	}
+}
+@media (max-width: 1280px) {
+	.comment_children {
+		padding-left: 8px;
+
+		.comment_item {
+			padding: 8px 10px 8px 20px;
+
+			&::before { left: 4px; }
+		}
+	}
+}
+
+// ============================================================
+// 댓글 작성 폼
+// ============================================================
+
+.comment_write {
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-base;
+	padding: 14px;
+	background: $color_white;
+
+	// textarea + 등록버튼 한 줄
+	.comment_write_row {
+		display: flex;
+		gap: 8px;
+		align-items: flex-start;
+
+		textarea {
+			flex: 1;
+			min-height: 64px;
+			padding: 10px;
+			border: 1px solid $color_gray_border;
+			border-radius: $border-radius-base;
+			background: $color_white;
+			font-size: $font_size_s;
+			font-family: inherit;
+			box-sizing: border-box;
+			resize: none;
+
+			&:focus { outline: none; border-color: $color_primary; }
+		}
+
+		.btn { align-self: stretch; }
+	}
+
+	// 비밀 댓글 체크박스
+	.comment_write_secret {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		margin-top: 4px;
+		font-size: $font_size_sm;
+		color: $color_777;
+		cursor: pointer;
+	}
+}

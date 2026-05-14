@@ -105,7 +105,7 @@
 }
 .board_info__title{
 	flex: 1;
-	max-width: 1510px;
+	max-width: 1450px;
 	min-width: 0;
 	display: flex;
 	align-items: center;
@@ -125,7 +125,7 @@
 	font-size: 14px;
 }
 .board_info_wrap{
-	flex: 0 280px;
+	flex: 0 340px;
 	display: flex;
 	align-items: center;
 	gap: 5px;
@@ -166,6 +166,15 @@
 		width: initial;
 		max-width: 100px;
 	}
+}
+.board_info__comment{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+	width: 50px;
+	color: $color_999;
+	font-size: $font_size_x;
 }
 .board_info__view{
 	flex: 1;
@@ -309,7 +318,7 @@
 	width: 100%;
 	min-height: 300px;
 	line-height: 1.7;
-	padding: 24px 5px;
+	padding: 14px 5px 24px 5px;
 	font-size: $font_size_base;
 
 	// reset으로 제거된 목록 스타일 복구 (에디터에서 작성한 ul/ol이 상세에서도 보이도록)
@@ -321,6 +330,8 @@
 	em{ font-style: italic; }
 	strong{ font-weight: bold; }
 	s{ text-decoration: line-through; }
+	// 본문 이미지 — 컨테이너 넘치지 않도록
+	img{ max-width: 100%; height: auto; }
 
 	// 첨부파일 영역 — 본문 위, 구분선으로 분리
 	.board_detail_file{
@@ -373,29 +384,27 @@
 // 좋아요 + 즐겨찾기 버튼 영역
 .board_reaction_wrap{
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	gap: 8px;
 	width: 100%;
-	padding: 10px;
-	border-top: 1px solid $color_ddd;
-	border-bottom: 1px solid $color_ddd;
+	border-top: 1px solid var(--gray-border);
+	padding-top: 12px;
 }
 .btn_reaction{
 	display: inline-flex;
 	align-items: center;
-	gap: 5px;
-	padding: 7px 18px;
-	border: 1px solid $color_ddd;
-	border-radius: $border-radius-pill;
+	gap: 4px;
+	padding: 5px 12px;
+	border: 1.5px solid $color_ccc;
+	border-radius: $border-radius-base;
 	background: $color_white;
-	color: $color_999;
+	color: $color_555;
 	font-size: $font_size_sm;
+	font-weight: 600;
 	cursor: pointer;
 	transition: border-color .2s, color .2s, background .2s;
 
-	svg{
-		font-size: 16px;
-	}
+	svg{ font-size: 15px; }
 }
 .btn_like{
 	.icon_on{ display: none; }
@@ -406,8 +415,8 @@
 	&._on,
 	&:disabled{
 		border-color: $color_red;
-		color: $color_red;
-		background: $color_red_bg;
+		color: $color_white;
+		background: $color_red;
 		cursor: not-allowed;
 		.icon_on{ display: block; }
 		.icon_off{ display: none; }
@@ -416,13 +425,13 @@
 .btn_bookmark{
 	.icon_on{ display: none; }
 	&:hover{
-		border-color: $color_yellow;
-		color: $color_yellow;
+		border-color: $color_orange;
+		color: $color_orange;
 	}
 	&._on{
-		border-color: $color_yellow;
-		color: $color_yellow;
-		background: $color_yellow_bg;
+		border-color: $color_orange;
+		color: $color_white;
+		background: $color_orange;
 		.icon_on{ display: block; }
 		.icon_off{ display: none; }
 	}

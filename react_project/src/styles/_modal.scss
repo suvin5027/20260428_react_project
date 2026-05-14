@@ -65,6 +65,11 @@
 		border-top: 1px solid $color_gray_border;
 	}
 }
+@media (max-width: 1280px) {
+	.popup {
+		min-width: 90%;
+	}
+}
 
 // 비밀글 비밀번호 팝업
 .popup_box {

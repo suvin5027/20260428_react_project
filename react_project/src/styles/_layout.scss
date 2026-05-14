@@ -36,6 +36,11 @@
 .wrap:has(.header_container) .main_container{
 	min-height: calc(100vh - 78px);
 }
+@media (max-width: 1280px) {
+	.wrap:has(.header_container) .main_container{
+		min-height: initial;
+	}
+}
 
 // 페이지 헤더 (타이틀 + 버튼 영역)
 .page_header {

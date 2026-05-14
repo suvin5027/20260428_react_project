@@ -159,14 +159,14 @@ function BoardWrite() {
 							type="text"
 							className={`input_text${errors.title ? ' _error' : ''}`}
 							placeholder="제목을 입력하세요"
-							maxLength={255}
+							maxLength={100}
 							value={title}
 							onChange={(e) => {
 								setTitle(e.target.value);
 								if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
 							}}
 						/>
-						<p className={`input_counter${title.length >= 230 ? ' _limit' : ''}`}>{title.length}/255</p>
+						<p className={`input_counter${title.length >= 90 ? ' _limit' : ''}`}>{title.length}/100</p>
 						{errors.title && <p className="form_error">{errors.title}</p>}
 					</div>
 				</div>

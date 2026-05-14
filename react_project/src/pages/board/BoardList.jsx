@@ -1,7 +1,8 @@
 // 외부 라이브러리
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility, MdFavorite } from 'react-icons/md';
+// TODO: 댓글 수 아이콘 import 추가 — MdChatBubbleOutline (react-icons/md)
+import { MdSearch, MdAttachFile, MdLock, MdVisibilityOff, MdVisibility, MdFavorite, MdChatBubbleOutline } from 'react-icons/md';
 
 // API / 상수
 import boardApi from '../../api/boardApi';
@@ -162,6 +163,9 @@ function BoardList() {
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
 										<span className='board_info__like'><MdFavorite /> {formatViewCount(item.likeCount ?? 0)}</span>
+										{/* TODO: 댓글 수 표시 — Spring BoardMapper에서 commentCount 필드 추가 필요
+												<span className='board_info__comment'><MdChatBubbleOutline /> {item.commentCount ?? 0}</span> */}
+										<span className='board_info__comment'><MdChatBubbleOutline /> {item.commentCount ?? 0}</span>
 										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</button>
@@ -190,6 +194,9 @@ function BoardList() {
 										<span className='board_info__user'>{item.author}</span>
 										<span className='board_info__date'>{item.createdAt}</span>
 										<span className='board_info__like'><MdFavorite /> {formatViewCount(item.likeCount ?? 0)}</span>
+										{/* TODO: 댓글 수 표시 — Spring BoardMapper에서 commentCount 필드 추가 필요
+												<span className='board_info__comment'><MdChatBubbleOutline /> {item.commentCount ?? 0}</span> */}
+										<span className='board_info__comment'><MdChatBubbleOutline /> {item.commentCount ?? 0}</span>
 										<span className='board_info__view'>조회 {formatViewCount(item.viewCount)}</span>
 									</div>
 								</Link>

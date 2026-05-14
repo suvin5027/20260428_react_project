@@ -235,11 +235,11 @@ function BoardEdit() {
 							type="text"
 							className="input_text"
 							placeholder="제목을 입력하세요"
-							maxLength={255}
+							maxLength={100}
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 						/>
-						<p className={`input_counter${title.length >= 230 ? ' _limit' : ''}`}>{title.length}/255</p>
+						<p className={`input_counter${title.length >= 90 ? ' _limit' : ''}`}>{title.length}/100</p>
 					</div>
 				</div>
 
