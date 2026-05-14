@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { CATEGORY_LABEL } from '../../constants';
@@ -6,9 +6,14 @@ import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
 import likeApi from '../../api/likeApi';
 import bookmarkApi from '../../api/bookmarkApi';
-import { MdAttachFile, MdVisibility, MdVisibilityOff, MdFavorite, MdFavoriteBorder, MdStar, MdStarBorder } from 'react-icons/md';
+import { MdAttachFile, MdVisibility, MdVisibilityOff, MdFavorite, MdFavoriteBorder, MdStar, MdStarBorder, MdKeyboardArrowUp } from 'react-icons/md';
 import { getCurrentUser } from '../../utils/authStorage';
 import authApi from '../../api/authApi';
+
+// 본문 — memo로 감싸서 부모 리렌더링 시 innerHTML 재평가 방지 (스크롤 위치 유지)
+const PostContent = memo(({ content }) => (
+	<div dangerouslySetInnerHTML={{ __html: content }} />
+));
 
 function BoardDetail() {
 	const { id } = useParams();
@@ -21,14 +26,35 @@ function BoardDetail() {
 	const [post, setPost] = useState(null);
 	const [files, setFiles] = useState([]); // 첨부파일 목록
 	const [isDeleteModal, setIsDeleteModal] = useState(false);
+	const [isBookmarkModal, setIsBookmarkModal] = useState(false);
 	// 비밀글 비밀번호 검증 관련 state
 	const [isVerified, setIsVerified] = useState(location.state?.verified || false); // 비밀번호 검증 통과 여부 (List에서 넘어온 경우 true)
 	const [passwordInput, setPasswordInput] = useState(''); // 입력한 비밀번호
 	const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
-	const [likeCount, setLikeCount] = useState(0); // 좋아요 수
-	const [isLiked, setIsLiked] = useState(false); // 현재 유저 좋아요 여부
-	const [isBookmarked, setIsBookmarked] = useState(false); // 즐겨찾기 여부
+	const likeBtnRef = useRef(null); // 좋아요 버튼 ref — DOM 직접 조작해 리렌더링 방지
+	const bookmarkBtnRef = useRef(null); // 즐겨찾기 버튼 ref — DOM 직접 조작해 리렌더링 방지
+	const btnTopRef = useRef(null); // 맨 위로 버튼 ref — DOM 직접 조작해 리렌더링 방지
+
+	// 스크롤 1/5 넘으면 버튼에 _visible 클래스 직접 토글 (state 변경 없이 리렌더링 없음)
+	useEffect(() => {
+		let ticking = false;
+		const handleScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				const scrollY = window.scrollY;
+				const total = document.documentElement.scrollHeight - window.innerHeight;
+				btnTopRef.current?.classList.toggle('_visible', scrollY > total / 5);
+				btnTopRef.current?.classList.toggle('_at_bottom', scrollY >= total - 50);
+				ticking = false;
+			});
+		};
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
+
+	const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 	useEffect(() => {
 		const load = async () => {
@@ -49,13 +75,19 @@ function BoardDetail() {
 				.then((res) => setFiles(res.data));
 			likeApi.getStatus(id, user.userSeq)
 				.then((res) => {
-					setLikeCount(res.data.likeCount);
-					setIsLiked(res.data.liked);
+					if (likeBtnRef.current) {
+						if (res.data.liked) {
+							likeBtnRef.current.classList.add('_on');
+							likeBtnRef.current.disabled = true;
+						}
+						const span = likeBtnRef.current.querySelector('span');
+						if (span) span.textContent = `좋아요 ${res.data.likeCount}`;
+					}
 				});
 			// 즐겨찾기 여부 조회 — 현재 로그인 유저 기준으로 초기 상태 로드
 			bookmarkApi.getStatus(id, user.userSeq)
 				.then((res) => {
-					setIsBookmarked(res.data.bookmarked);
+					bookmarkBtnRef.current?.classList.toggle('_on', res.data.bookmarked);
 				});
 		};
 		load();
@@ -147,17 +179,25 @@ function BoardDetail() {
 		);
 	}
 
-	// 즐겨찾기 토글 — 서버에서 등록/취소 처리 후 현재 상태(bookmarked)를 받아 state 반영
-	const handleBookmark = async () => {
+	// 즐겨찾기 버튼 클릭 — 모달 먼저 띄움
+	const handleBookmark = () => setIsBookmarkModal(true);
+
+	// 모달 확인 시 실제 토글 — 서버 toggle 후 _on 클래스 직접 반영
+	const confirmBookmark = async () => {
 		const res = await bookmarkApi.toggle(id, user.userSeq);
-		setIsBookmarked(res.data.bookmarked);
+		bookmarkBtnRef.current?.classList.toggle('_on', res.data.bookmarked);
+		setIsBookmarkModal(false);
 	};
 
-	// 좋아요 등록 — 하루 1회, 오늘 이미 눌렀으면 서버에서 무시하고 현재 상태 반환
+	// 좋아요 등록 — 서버 toggle 후 카운트·_on·disabled 직접 반영 (리렌더링 없음)
 	const handleLike = async () => {
 		const res = await likeApi.toggle(id, user.userSeq);
-		setLikeCount(res.data.likeCount);
-		setIsLiked(res.data.liked);
+		if (likeBtnRef.current) {
+			likeBtnRef.current.classList.add('_on');
+			likeBtnRef.current.disabled = true;
+			const span = likeBtnRef.current.querySelector('span');
+			if (span) span.textContent = `좋아요 ${res.data.likeCount}`;
+		}
 	};
 
 	const handleDelete = async () => {
@@ -183,38 +223,41 @@ function BoardDetail() {
 
 			{/* 본문 — dangerouslySetInnerHTML: TipTap이 저장한 HTML을 그대로 렌더링 */}
 			<div className="board_detail_body">
-				<div dangerouslySetInnerHTML={{ __html: post.content }} />
+				{/* 첨부파일 목록 — 본문 위에 가로 나열 */}
+				{files.length > 0 && (
+					<div className="board_detail_file">
+						<h6 className="file_title">첨부파일</h6>
+						<ul className="file_list">
+							{files.map((file) => (
+								<li key={file.fileSeq} className="file_list_item">
+									<button type="button" className="btn_download" onClick={() => handleDownload(file)}>
+										<MdAttachFile />
+										{file.originalName}
+									</button>
+								</li>
+							))}
+						</ul>
+					</div>
+				)}
+				<PostContent content={post.content} />
 			</div>
 
 			{/* 좋아요 + 즐겨찾기 버튼 영역 */}
 			<div className="board_reaction_wrap">
-				{/* isLiked: 오늘 이미 눌렀으면 disabled — 클릭 막히고 cursor: not-allowed */}
-				<button type="button" className={`btn_reaction btn_like${isLiked ? ' _on' : ''}`} onClick={handleLike} disabled={isLiked}>
-					{isLiked ? <MdFavorite /> : <MdFavoriteBorder />}
-					<span>좋아요 {likeCount}</span>
+				{/* 좋아요 — _on 시 채워진 하트·disabled, 아이콘 두 개 항상 DOM에 있고 CSS로 토글 */}
+				<button ref={likeBtnRef} type="button" className="btn_reaction btn_like" onClick={handleLike}>
+					<MdFavorite className="icon_on" />
+					<MdFavoriteBorder className="icon_off" />
+					<span>좋아요 0</span>
 				</button>
-				{/* isBookmarked: true면 _on 클래스 추가, 아이콘도 채워진 별로 전환 */}
-				<button type="button" className={`btn_reaction btn_bookmark${isBookmarked ? ' _on' : ''}`} onClick={handleBookmark}>
-					{isBookmarked ? <MdStar /> : <MdStarBorder />}
+				{/* 즐겨찾기 — _on 시 채워진 별, 아이콘 두 개 항상 DOM에 있고 CSS로 토글 */}
+				<button ref={bookmarkBtnRef} type="button" className="btn_reaction btn_bookmark" onClick={handleBookmark}>
+					<MdStar className="icon_on" />
+					<MdStarBorder className="icon_off" />
 					<span>즐겨찾기</span>
 				</button>
 			</div>
 
-			{files.length > 0 && (
-				<div className="board_detail_footer">
-					<h6 className="file_title">첨부파일 다운로드</h6>
-					<ul className="file_list">
-						{files.map((file) => (
-							<li key={file.fileSeq} className="file_list_item">
-								<button type="button" className="btn_download" onClick={() => handleDownload(file)}>
-									<MdAttachFile />
-									{file.originalName}
-								</button>
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
 
 			{/* 하단 버튼 */}
 			<div className="board_ft_wrap board_detail_ft">
@@ -232,6 +275,18 @@ function BoardDetail() {
 					onCancel={() => setIsDeleteModal(false)}
 				/>
 			)}
+			{isBookmarkModal && (
+				<Modal
+					message={bookmarkBtnRef.current?.classList.contains('_on') ? '즐겨찾기를 해제하시겠습니까?' : '즐겨찾기 하시겠습니까?'}
+					confirmClassName="btn_add"
+					onConfirm={confirmBookmark}
+					onCancel={() => setIsBookmarkModal(false)}
+				/>
+			)}
+			{/* ref로 _visible 클래스 직접 토글 — state 없이 fade 처리 */}
+			<button ref={btnTopRef} type="button" className="btn_top" onClick={scrollToTop}>
+				<MdKeyboardArrowUp />
+			</button>
 		</div>
 	);
 }

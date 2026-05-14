@@ -7,7 +7,6 @@
 .login {
 	@include flex_center;
 	height: 100%;
-	background: $color_gray_bg;
 
 	// 로그인 폼 박스
 	.login_box {

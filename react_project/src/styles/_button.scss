@@ -173,3 +173,36 @@ button {
 		color: $color-btn-cancel-text;
 	}
 }
+
+
+// 맨 위로 버튼 (상세 페이지 전용)
+.btn_top{
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: $color_999;
+	color: $color_white;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(0,0,0,.2);
+	opacity: 0;
+	pointer-events: none; // 숨겨진 상태에서 클릭 방지
+	transition: opacity .3s, background .2s, bottom .2s;
+
+	svg{ font-size: 22px; }
+
+	&._visible{
+		opacity: 1;
+		pointer-events: auto;
+	}
+	&._at_bottom{ bottom: 40px; } // footer 위로 올라감
+	&:hover{ background: $color_777; }
+}
