@@ -5,7 +5,8 @@ import { CATEGORY_LABEL } from '../../constants';
 import boardApi from '../../api/boardApi';
 import fileApi from '../../api/fileApi';
 import likeApi from '../../api/likeApi';
-import { MdAttachFile, MdVisibility, MdVisibilityOff, MdFavorite, MdFavoriteBorder, MdBookmarkBorder } from 'react-icons/md';
+import bookmarkApi from '../../api/bookmarkApi';
+import { MdAttachFile, MdVisibility, MdVisibilityOff, MdFavorite, MdFavoriteBorder, MdStar, MdStarBorder } from 'react-icons/md';
 import { getCurrentUser } from '../../utils/authStorage';
 import authApi from '../../api/authApi';
 
@@ -27,7 +28,7 @@ function BoardDetail() {
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시/숨김
 	const [likeCount, setLikeCount] = useState(0); // 좋아요 수
 	const [isLiked, setIsLiked] = useState(false); // 현재 유저 좋아요 여부
-
+	const [isBookmarked, setIsBookmarked] = useState(false); // 즐겨찾기 여부
 
 	useEffect(() => {
 		const load = async () => {
@@ -50,6 +51,11 @@ function BoardDetail() {
 				.then((res) => {
 					setLikeCount(res.data.likeCount);
 					setIsLiked(res.data.liked);
+				});
+			// 즐겨찾기 여부 조회 — 현재 로그인 유저 기준으로 초기 상태 로드
+			bookmarkApi.getStatus(id, user.userSeq)
+				.then((res) => {
+					setIsBookmarked(res.data.bookmarked);
 				});
 		};
 		load();
@@ -141,6 +147,12 @@ function BoardDetail() {
 		);
 	}
 
+	// 즐겨찾기 토글 — 서버에서 등록/취소 처리 후 현재 상태(bookmarked)를 받아 state 반영
+	const handleBookmark = async () => {
+		const res = await bookmarkApi.toggle(id, user.userSeq);
+		setIsBookmarked(res.data.bookmarked);
+	};
+
 	// 좋아요 등록 — 하루 1회, 오늘 이미 눌렀으면 서버에서 무시하고 현재 상태 반환
 	const handleLike = async () => {
 		const res = await likeApi.toggle(id, user.userSeq);
@@ -181,8 +193,9 @@ function BoardDetail() {
 					{isLiked ? <MdFavorite /> : <MdFavoriteBorder />}
 					<span>좋아요 {likeCount}</span>
 				</button>
-				<button type="button" className="btn_reaction btn_bookmark">
-					<MdBookmarkBorder />
+				{/* isBookmarked: true면 _on 클래스 추가, 아이콘도 채워진 별로 전환 */}
+				<button type="button" className={`btn_reaction btn_bookmark${isBookmarked ? ' _on' : ''}`} onClick={handleBookmark}>
+					{isBookmarked ? <MdStar /> : <MdStarBorder />}
 					<span>즐겨찾기</span>
 				</button>
 			</div>
