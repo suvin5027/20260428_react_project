@@ -547,4 +547,13 @@
 
 	// 이미지
 	img{ max-width: 100%; height: auto; }
+
+	// Placeholder 익스텐션 — 에디터 비었을 때 안내 문구
+	p.is-editor-empty:first-child::before {
+		content: attr(data-placeholder);
+		float: left;
+		color: $color_gray;
+		pointer-events: none;
+		height: 0;
+	}
 }

@@ -201,3 +201,12 @@ textarea{
 .input_text._error {
 	border-color: $color_red;
 }
+// 글자 수 카운터
+.input_counter {
+	margin-top: 4px;
+	font-size: $font_size_sm;
+	color: $color_999;
+	text-align: right;
+
+	&._limit { color: $color_red; }
+}

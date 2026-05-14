@@ -2,15 +2,16 @@ import { useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
 import fileApi from '../api/fileApi';
 
-// props: value(초기 내용), onChange(내용 바뀔 때 실행할 함수)
-function BoardEditor({ value, onChange }) {
+// props: value(초기 내용), onChange(내용 바뀔 때 실행할 함수), placeholder(안내 문구)
+function BoardEditor({ value, onChange, placeholder = '내용을 입력하세요.' }) {
 	// 숨겨진 file input을 버튼 클릭으로 열기 위한 ref
 	const fileInputRef = useRef(null);
 
 	const editor = useEditor({
-		extensions: [StarterKit, Image],
+		extensions: [StarterKit, Image, Placeholder.configure({ placeholder })],
 		content: value,
 		onUpdate: ({ editor }) => {
 			onChange(editor.getHTML());
