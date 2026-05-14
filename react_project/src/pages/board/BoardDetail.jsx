@@ -139,7 +139,7 @@ function BoardDetail() {
 	// 본인 글 여부 / 관리자 여부 — 둘 중 하나면 수정·삭제 버튼 노출
 	const isOwner = user?.userSeq === post.userSeq;
 	const isAdmin = user?.userRole === 'ADMIN';
-	const canEdit = isOwner || isAdmin;
+	const canDelete = isOwner || isAdmin;
 
 	const isSecret = post.category === 'secret';
 	const needsPassword = isSecret && isOwner && !isVerified; // 비밀글 + 본인 + 아직 미검증
@@ -231,6 +231,12 @@ function BoardDetail() {
 					<span className="board_detail_date">{post.createdAt}</span>
 					{/* API에서 내려오는 viewCount 값 표시 */}
 					<span className="board_detail_view">조회 {post.viewCount.toLocaleString()}</span>
+					{canDelete && (
+						<div className="board_btn_wrap board_hd_btn_wrap">
+							{isOwner && <Link to={`/board/${id}/edit`} state={{ verified: isVerified }} className="btn btn_edit">수정</Link>}
+							<button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>
+						</div>
+					)}
 				</div>
 			</div>
 
@@ -272,27 +278,15 @@ function BoardDetail() {
 			</div>
 
 
-			{/* TODO: 댓글 영역 — 좋아요/즐겨찾기 버튼 아래에 삽입
-					<CommentList
-						boardSeq={Number(id)}
-						boardAuthorSeq={post.userSeq}
-						user={user}
-					/> */}
 			<CommentList
 				boardSeq={Number(id)}
-				boboardAuthorSeq={post.userSeq}
+				boardAuthorSeq={post.userSeq}
 				user={user}
 			/>
 
 			{/* 하단 버튼 */}
 			<div className="board_ft_wrap board_detail_ft">
 				<Link to="/board" className="btn btn_list">목록</Link>
-				{canEdit && (
-					<div className="board_btn_wrap">
-						<Link to={`/board/${id}/edit`} state={{ verified: isVerified }} className="btn btn_edit">수정</Link>
-						<button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>
-					</div>
-				)}
 			</div>
 			{isDeleteModal && (
 				<Modal

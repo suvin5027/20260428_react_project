@@ -307,10 +307,22 @@
 }
 .board_detail_meta{
 	display: flex;
+	align-items: center;
 	gap: 12px;
 	padding: 0 5px 12px;
 	font-size: $font_size_sm;
 	color: $color_999;
+}
+.board_btn_wrap{
+	display: flex;
+	gap: 6px;
+
+	&.board_hd_btn_wrap{
+		.btn_edit, .btn_del{
+			padding: 2px 4px;
+			font-size: $font_size_x;
+		}
+	}
 }
 
 // 본문
@@ -440,10 +452,6 @@
 // 하단 버튼 영역
 .board_detail_ft{
 	justify-content: space-between;
-}
-.board_btn_wrap{
-	display: flex;
-	gap: 6px;
 }
 
 // ============================================================

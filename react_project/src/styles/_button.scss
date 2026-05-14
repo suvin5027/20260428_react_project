@@ -35,12 +35,15 @@ button {
 
 // 기본 버튼
 .btn {
-	padding: 6px 14px;
+	display: inline-flex;
+	align-items: center;
 	border: 1px solid $color_gray_border;
 	border-radius: $border-radius-base;
-	background: $color_white;
+	padding: 6px 14px;
+	line-height: 1.25;
 	font-family: inherit;
 	font-size: $font_size_sm;
+	background: $color_white;
 	transition: .3s;
 	cursor: pointer;
 
