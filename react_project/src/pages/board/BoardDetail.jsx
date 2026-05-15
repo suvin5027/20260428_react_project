@@ -73,7 +73,8 @@ function BoardDetail() {
 		const load = async () => {
 			// viewCountCalled: React StrictMode는 개발 환경에서 useEffect를 2번 실행한다.
 			// ref는 리렌더링과 관계없이 값이 유지되므로, 플래그로 써서 최초 1번만 실행되도록 막는다.
-			if (!viewCountCalled.current) {
+			// 관리자(ADMIN/SUPER)는 조회수 증가 제외
+			if (!viewCountCalled.current && user?.userRole !== 'ADMIN' && user?.userRole !== 'SUPER') {
 				viewCountCalled.current = true;
 				// await로 increment가 DB에 반영될 때까지 기다린다.
 				// await 없이 동시에 호출하면 getDetail이 먼저 응답을 받아
@@ -138,7 +139,7 @@ function BoardDetail() {
 
 	// 본인 글 여부 / 관리자 여부 — 둘 중 하나면 수정·삭제 버튼 노출
 	const isOwner = user?.userSeq === post.userSeq;
-	const isAdmin = user?.userRole === 'ADMIN';
+	const isAdmin = user?.userRole === 'ADMIN' || user?.userRole === 'SUPER';
 	const canDelete = isOwner || isAdmin;
 
 	const isSecret = post.category === 'secret';
@@ -163,26 +164,28 @@ function BoardDetail() {
 	// 비밀글 + 본인 + 미검증이면 비밀번호 폼만 표시 (제목/본문/버튼 전부 숨김)
 	if (needsPassword) {
 		return (
-			<div className="board_container board_detail_container">
-				<div className="detail_password_box">
+			<div className="popup_overlay">
+				<div className="popup_box popup_password_box">
 					<h6>비밀번호를 입력하세요.</h6>
-					{/* 비밀번호 input + 눈 아이콘 토글 */}
-					<div className="input_form_group">
-						<input
-							type={showPassword ? 'text' : 'password'}
-							name="modalInput"
-							id="modalInput"
-							className="input_password"
-							autoComplete="new-password"
-							value={passwordInput}
-							onChange={(e) => setPasswordInput(e.target.value)}
-							onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
-						/>
-						<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
-							{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-						</button>
+					<div className="popup_box_body">
+						{/* 비밀번호 input + 눈 아이콘 토글 */}
+						<div className="input_form_group">
+							<input
+								type={showPassword ? 'text' : 'password'}
+								name="modalInput"
+								id="modalInput"
+								className="input_password"
+								autoComplete="new-password"
+								value={passwordInput}
+								onChange={(e) => setPasswordInput(e.target.value)}
+								onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+							/>
+							<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+							</button>
+						</div>
+						{passwordError && <p className="form_error">{passwordError}</p>}
 					</div>
-					{passwordError && <p className="form_error">{passwordError}</p>}
 					<div className="popup_box_ft">
 						<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
 						<button type="button" className="btn btn_cancel" onClick={() => navigate('/board')}>취소</button>

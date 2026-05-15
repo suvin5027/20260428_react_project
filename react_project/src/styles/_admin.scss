@@ -2,5 +2,67 @@
 @use './mixin' as *;
 
 // ============================================================
-// 어드민
+// 어드민 레이아웃
 // ============================================================
+.admin_container {
+	display: flex;
+	gap: 24px;
+	align-items: flex-start;
+	padding: 24px 0;
+}
+
+// 사이드 메뉴
+.admin_side {
+	flex-shrink: 0;
+	width: 180px;
+	border: 1px solid $color_ddd;
+	border-radius: $border-radius-base;
+	overflow: hidden;
+}
+.admin_side_title {
+	padding: 14px 16px;
+	font-size: $font_size_base;
+	font-weight: 700;
+	background: $color_f5f5f5;
+	border-bottom: 1px solid $color_ddd;
+}
+.admin_nav {
+	list-style: none;
+	a {
+		display: block;
+		padding: 12px 16px;
+		font-size: $font_size_sm;
+		color: $color_555;
+		border-bottom: 1px solid $color_ddd;
+		transition: background .2s;
+		&:last-child { border-bottom: none; }
+		&:hover { background: $color_f5f5f5; }
+		&._active {
+			font-weight: 700;
+			color: $color_333;
+			background: $color_f5f5f5;
+		}
+	}
+}
+
+// 콘텐츠 영역
+.admin_content {
+	flex: 1;
+	min-width: 0;
+}
+
+// ============================================================
+// 어드민 섹션 공통
+// ============================================================
+.admin_section_title {
+	margin-bottom: 16px;
+	font-size: $font_size_lg;
+	font-weight: 700;
+}
+
+// 카테고리 필터
+.admin_filter {
+	display: flex;
+	gap: 6px;
+	margin-bottom: 16px;
+}

@@ -73,6 +73,12 @@ function Header() {
 					<li className="gnb_item">
 						<NavLink to="/board2" className={({ isActive }) => `gnb_link${isActive ? ' _active' : ''}`}>게시판2</NavLink>
 					</li>
+					{/* 관리자 전용 메뉴 */}
+					{(user?.userRole === 'ADMIN' || user?.userRole === 'SUPER') && (
+						<li className="gnb_item">
+							<NavLink to="/admin" className={({ isActive }) => `gnb_link${isActive ? ' _active' : ''}`}>시스템 관리</NavLink>
+						</li>
+					)}
 				</ul>
 			</nav>
 			<div className="header_info">
@@ -84,7 +90,7 @@ function Header() {
 								className="header_nickname"
 								onClick={() => setIsPopupOpen((prev) => !prev)}
 							>
-								{user?.userRole === 'ADMIN'
+								{(user?.userRole === 'ADMIN' || user?.userRole === 'SUPER')
 									? <MdAdminPanelSettings className="header_nickname_icon _admin" />
 									: <MdPerson className="header_nickname_icon" />
 								}

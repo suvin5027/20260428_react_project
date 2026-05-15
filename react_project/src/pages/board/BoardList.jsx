@@ -212,22 +212,24 @@ function BoardList() {
 					<div className="popup_box">
 						<h6>비밀번호를 입력하세요.</h6>
 						{/* 비밀번호 input + 눈 아이콘 토글 */}
-						<div className="input_form_group">
-							<input
-								type={showPassword ? 'text' : 'password'}
-								name="modalInput"
-								id="modalInput"
-								className="input_password"
-								autoComplete="new-password"
-								value={passwordInput}
-								onChange={(e) => setPasswordInput(e.target.value)}
-								onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
-							/>
-							<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
-								{showPassword ? <MdVisibilityOff /> : <MdVisibility /> }
-							</button>
+						<div className="popup_box_body">
+							<div className="input_form_group">
+								<input
+									type={showPassword ? 'text' : 'password'}
+									name="modalInput"
+									id="modalInput"
+									className="input_password"
+									autoComplete="new-password"
+									value={passwordInput}
+									onChange={(e) => setPasswordInput(e.target.value)}
+									onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+								/>
+								<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+									{showPassword ? <MdVisibilityOff /> : <MdVisibility /> }
+								</button>
+							</div>
+							{passwordError && <p className="form_error">{passwordError}</p>}
 						</div>
-						{passwordError && <p className="form_error">{passwordError}</p>}
 						<div className="popup_box_ft">
 							<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
 							<button type="button" className="btn btn_cancel" onClick={() => { setSelectedPost(null); setPasswordInput(''); setPasswordError(''); setShowPassword(false); }}>취소</button>

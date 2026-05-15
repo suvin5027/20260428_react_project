@@ -37,6 +37,7 @@ button {
 .btn {
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	border: 1px solid $color_gray_border;
 	border-radius: $border-radius-base;
 	padding: 6px 14px;
@@ -116,6 +117,22 @@ button {
 		background: $color_white;
 		color: $color-btn-list-bg;
 		border-color: $color-btn-list-bg;
+	}
+}
+
+// 검색
+.btn_search{
+	padding: 7px 12px;
+	line-height: 1;
+	background: $color_555;
+	color: $color_white;
+	border-color: $color_555;
+	font-size: $font_size_base;
+
+	&:hover, &:focus{
+		background: $color_white;
+		color: $color_555;
+		border-color: $color_555;
 	}
 }
 
@@ -214,5 +231,53 @@ button {
 		bottom: 16px !important;
 		width: 34px;
 		height: 34px;
+	}
+}
+
+
+.btn_reaction{
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 5px 12px;
+	border: 1.5px solid $color_ccc;
+	border-radius: $border-radius-base;
+	background: $color_white;
+	color: $color_555;
+	font-size: $font_size_sm;
+	font-weight: 600;
+	cursor: pointer;
+	transition: border-color .2s, color .2s, background .2s;
+
+	svg{ font-size: 15px; }
+}
+.btn_like{
+	.icon_on{ display: none; }
+	&:hover:not(:disabled){
+		border-color: $color_red;
+		color: $color_red;
+	}
+	&._on,
+	&:disabled{
+		border-color: $color_red;
+		color: $color_white;
+		background: $color_red;
+		cursor: not-allowed;
+		.icon_on{ display: block; }
+		.icon_off{ display: none; }
+	}
+}
+.btn_bookmark{
+	.icon_on{ display: none; }
+	&:hover{
+		border-color: $color_orange;
+		color: $color_orange;
+	}
+	&._on{
+		border-color: $color_orange;
+		color: $color_white;
+		background: $color_orange;
+		.icon_on{ display: block; }
+		.icon_off{ display: none; }
 	}
 }

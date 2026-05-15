@@ -10,13 +10,23 @@ import BoardList from './pages/board/BoardList';
 import BoardDetail from './pages/board/BoardDetail';
 import BoardWrite from './pages/board/BoardWrite';
 import BoardEdit from './pages/board/BoardEdit';
-import Admin from './pages/Admin';
-import { isLoggedIn } from './utils/authStorage';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminUserList from './pages/admin/AdminUserList';
+import AdminBoardList from './pages/admin/AdminBoardList';
+import { isLoggedIn, getCurrentUser } from './utils/authStorage';
 import './App.scss';
 
 // 비로그인 시 /login으로 이동
 function ProtectedRoute({ children }) {
 	return isLoggedIn() ? children : <Navigate to="/login" replace />;
+}
+
+// 관리자 전용 — 비로그인이면 /login, ADMIN/SUPER 아니면 /로 이동
+function AdminRoute({ children }) {
+	if (!isLoggedIn()) return <Navigate to="/login" replace />;
+	const role = getCurrentUser()?.userRole;
+	if (role !== 'ADMIN' && role !== 'SUPER') return <Navigate to="/" replace />;
+	return children;
 }
 
 function App() {
@@ -35,7 +45,11 @@ function App() {
 						<Route path="/board/write" element={<ProtectedRoute><BoardWrite /></ProtectedRoute>} />
 						<Route path="/board/:id" element={<ProtectedRoute><BoardDetail /></ProtectedRoute>} />
 						<Route path="/board/:id/edit" element={<ProtectedRoute><BoardEdit /></ProtectedRoute>} />
-						<Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+						<Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+							<Route index element={<Navigate to="/admin/users" replace />} />
+							<Route path="users" element={<AdminUserList />} />
+							<Route path="boards" element={<AdminBoardList />} />
+						</Route>
 						<Route path="*" element={<ProtectedRoute><Navigate to="/" replace /></ProtectedRoute>} />
 					</Routes>
 				</div>

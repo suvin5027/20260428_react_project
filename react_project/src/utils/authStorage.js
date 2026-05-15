@@ -41,10 +41,10 @@ export function isLoggedIn() {
 	return !!getCurrentUser();
 }
 
-// 관리자 여부 (userRole이 'ADMIN'인 사용자)
+// 관리자 여부 (ADMIN 또는 SUPER)
 export function isAdmin() {
 	const user = getCurrentUser();
-	return user?.userRole === 'ADMIN';
+	return user?.userRole === 'ADMIN' || user?.userRole === 'SUPER';
 }
 
 // 로그인 성공 시 사용자 정보 저장 (loginTime 포함)

@@ -51,3 +51,10 @@ export const CATEGORY_OPTIONS = [
 	{ value: 'general', label: '일반글' },
 	{ value: 'question', label: '질문글' },
 ];
+
+// 유저 역할 옵션 목록
+export const ROLE_OPTIONS = [
+	{ value: 'USER', label: '사용자' },
+	{ value: 'ADMIN', label: '관리자' },
+	{ value: 'SUPER', label: '최고 관리자' },
+];

@@ -32,11 +32,12 @@ function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user,
 	//                    || boardAuthorSeq  === user?.userSeq    // 게시글 작성자
 	//                    || user?.userRole  === 'ADMIN';         // 관리자
 	const canEdit = comment.userSeq === user?.userSeq;
-	const canDelete = comment.userSeq === user?.userSeq || user?.userRole === "ADMIN";
+	const isAdmin = user?.userRole === "ADMIN" || user?.userRole === "SUPER";
+	const canDelete = comment.userSeq === user?.userSeq || isAdmin;
 	const canSeeSecret = comment.userSeq === user?.userSeq    // 댓글 작성자 본인
 											|| boardAuthorSeq === user?.userSeq    // 게시글 작성자
 											|| parentAuthorSeq === user?.userSeq   // 부모 댓글 작성자 (대댓글 비밀 열람)
-											|| user?.userRole === "ADMIN";         // 관리자
+											|| isAdmin;                            // 관리자
 
 	// -------------------------------------------------------
 	// 표시 분기 — 이 두 값으로 아래 JSX에서 3가지 케이스 처리
@@ -65,7 +66,7 @@ function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user,
 	// 댓글 삭제 (대댓글 있으면 Spring에서 soft delete, 없으면 hard delete — 프론트는 그냥 호출만)
 	const handleDelete = async () => {
 		// 관리자가 남의 댓글을 삭제하는 경우만 ADMIN, 나머지는 USER
-		const deletedBy = user?.userRole === 'ADMIN' && comment.userSeq !== user?.userSeq ? 'ADMIN' : 'USER';
+		const deletedBy = isAdmin && comment.userSeq !== user?.userSeq ? 'ADMIN' : 'USER';
 		await commentApi.delete(boardSeq, comment.commentSeq, deletedBy);
 		onRefresh();
 	};

@@ -92,7 +92,8 @@
 		color: $color_red_sub;
 	}
 	&._question{
-		background: $color_yellow_bg;
+		background: $color_green_bg;
+		color: $color_green_sub;
 	}
 	&._secret{
 		background: $color_blue_bg;
@@ -190,66 +191,6 @@
 	}
 }
 
-// 검색
-.search_wrap{
-	display: flex;
-	justify-content: center;
-	gap: 5px;
-	@include mb(15);
-}
-@media (max-width: 1280px) {
-	.search_wrap{
-		width: 100%;
-	}
-}
-.search_select{
-	padding: 5px 8px;
-	border: 1px solid $color_ddd;
-	border-radius: $border-radius-base;
-	font-size: $font_size_sm;
-	background: $color_white;
-	cursor: pointer;
-}
-.search_form_group{
-	display: flex;
-	align-items: center;
-	gap: 5px;
-}
-@media (max-width: 1280px) {
-	.search_form_group{
-		width: 100%;
-	}
-}
-.search_input{
-	width: 260px;
-	padding: 6px 10px;
-	border: 1px solid $color_ddd;
-	border-radius: $border-radius-base;
-	font-size: $font_size_sm;
-
-	&:focus{
-		outline: none;
-		border-color: $color_blue;
-	}
-}
-@media (max-width: 1280px) {
-	.search_input{
-		width: 100%;
-	}
-}
-.btn_search{
-	padding: 5px 12px;
-	background: $color_555;
-	color: $color_white;
-	border-color: $color_555;
-	font-size: $font_size_base;
-
-	&:hover, &:focus{
-		background: $color_white;
-		color: $color_555;
-		border-color: $color_555;
-	}
-}
 
 // 게시글 없을 때
 .board_empty{
@@ -402,52 +343,6 @@
 	border-top: 1px solid var(--gray-border);
 	padding-top: 12px;
 }
-.btn_reaction{
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	padding: 5px 12px;
-	border: 1.5px solid $color_ccc;
-	border-radius: $border-radius-base;
-	background: $color_white;
-	color: $color_555;
-	font-size: $font_size_sm;
-	font-weight: 600;
-	cursor: pointer;
-	transition: border-color .2s, color .2s, background .2s;
-
-	svg{ font-size: 15px; }
-}
-.btn_like{
-	.icon_on{ display: none; }
-	&:hover:not(:disabled){
-		border-color: $color_red;
-		color: $color_red;
-	}
-	&._on,
-	&:disabled{
-		border-color: $color_red;
-		color: $color_white;
-		background: $color_red;
-		cursor: not-allowed;
-		.icon_on{ display: block; }
-		.icon_off{ display: none; }
-	}
-}
-.btn_bookmark{
-	.icon_on{ display: none; }
-	&:hover{
-		border-color: $color_orange;
-		color: $color_orange;
-	}
-	&._on{
-		border-color: $color_orange;
-		color: $color_white;
-		background: $color_orange;
-		.icon_on{ display: block; }
-		.icon_off{ display: none; }
-	}
-}
 
 // 하단 버튼 영역
 .board_detail_ft{
@@ -544,8 +439,8 @@
 }
 // EditorContent 내부 ProseMirror 영역
 .board_editor .ProseMirror{
-	min-height: 360px;
-	max-height: 360px;
+	min-height: 250px;
+	max-height: 250px;
 	line-height: 1.7;
 	padding: 12px;
 	font-size: $font_size_sm;

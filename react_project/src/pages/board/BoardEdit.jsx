@@ -92,7 +92,7 @@ function BoardEdit() {
 	}
 
 	const isOwner = user?.userSeq === post.userSeq;
-	const isAdminUser = user?.userRole === 'ADMIN';
+	const isAdminUser = user?.userRole === 'ADMIN' || user?.userRole === 'SUPER';
 	const isSecret = post.category === 'secret';
 
 	// 비밀글인데 관리자도 아니고 본인도 아니면 목록으로 redirect
@@ -116,26 +116,28 @@ function BoardEdit() {
 
 	if (needsPassword) {
 		return (
-			<div className="board_container board_edit_container">
-				<div className="detail_password_box">
+			<div className="popup_overlay">
+				<div className="popup_box popup_password_box">
 					<h6>비밀번호를 입력하세요.</h6>
-					{/* 비밀번호 input + 눈 아이콘 토글 */}
-					<div className="input_form_group">
-						<input
-							type={showPassword ? 'text' : 'password'}
-							name="modalInput"
-							id="modalInput"
-							className="input_password"
-							autoComplete="new-password"
-							value={passwordInput}
-							onChange={(e) => setPasswordInput(e.target.value)}
-							onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
-						/>
-						<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
-							{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-						</button>
+					<div className="popup_box_body">
+						{/* 비밀번호 input + 눈 아이콘 토글 */}
+						<div className="input_form_group">
+							<input
+								type={showPassword ? 'text' : 'password'}
+								name="modalInput"
+								id="modalInput"
+								className="input_password"
+								autoComplete="new-password"
+								value={passwordInput}
+								onChange={(e) => setPasswordInput(e.target.value)}
+								onKeyDown={(e) => e.key === 'Enter' && handleVerifyPassword()}
+							/>
+							<button type="button" className="btn_visible" onClick={() => setShowPassword(!showPassword)}>
+								{showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+							</button>
+						</div>
+						{passwordError && <p className="form_error">{passwordError}</p>}
 					</div>
-					{passwordError && <p className="form_error">{passwordError}</p>}
 					<div className="popup_box_ft">
 						<button type="button" className="btn btn_add" onClick={handleVerifyPassword}>확인</button>
 						<button type="button" className="btn btn_cancel" onClick={() => navigate('/board')}>취소</button>

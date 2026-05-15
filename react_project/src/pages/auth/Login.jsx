@@ -93,7 +93,7 @@ function Login() {
 						{errors.id && <p className="form_error">{errors.id}</p>}
 					</div>
 
-					<button type="submit" className="btn btn_primary">로그인</button>
+					<button type="submit" className="btn btn_add">로그인</button>
 					{/* 아이디/비밀번호 저장 체크박스 */}
 					<div className="login_remember">
 						<label className="login_remember_item">

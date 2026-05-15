@@ -12,7 +12,7 @@
 		padding: 10px 12px;
 		border: 1px solid $color_gray_border;
 		text-align: left;
-		font-size: $font_size_base;
+		font-size: $font_size_s;
 	}
 
 	th {
@@ -33,5 +33,26 @@
 		th, td {
 			border: none;
 		}
+	}
+}
+
+// ============================================================
+// 어드민 테이블
+// ============================================================
+.admin_table {
+	width: 100%;
+	th {
+		background: $color_f5f5f5;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	td {
+		vertical-align: middle;
+	}
+	// 관리 버튼 셀
+	.admin_table_actions {
+		display: flex;
+		gap: 4px;
+		justify-content: center;
 	}
 }

@@ -31,6 +31,10 @@
 		justify-content: center;
 		background: $color_gray_bg;
 	}
+	> .admin_container{
+		flex-direction: row;
+		align-items: flex-start;
+	}
 }
 // 로그인 페이지가 아니면 헤더 높이도 제외
 .wrap:has(.header_container) .main_container{
