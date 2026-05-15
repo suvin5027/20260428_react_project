@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import adminApi from '../../api/adminApi';
 import Modal from '../../components/Modal';
-import { CATEGORY_LABEL } from '../../constants';
+import Pagination from '../../components/Pagination';
+import { CATEGORY_LABEL, PAGE_SIZE } from '../../constants';
 
 function AdminBoardList() {
 	const [boards, setBoards] = useState([]);
 	const [category, setCategory] = useState(''); // 카테고리 필터 ('' = 전체)
 	const [deleteTarget, setDeleteTarget] = useState(null); // 삭제할 boardSeq (Modal용)
+	const [currentPage, setCurrentPage] = useState(1);
 
-	// category 바뀔 때마다 목록 재조회 (마운트 시 + 탭 클릭 시)
+	// category 바뀔 때마다 1페이지로 초기화 후 재조회
 	useEffect(() => {
+		setCurrentPage(1);
 		fetchBoards();
 	}, [category]);
 
@@ -30,6 +33,10 @@ function AdminBoardList() {
 		setDeleteTarget(null);
 		fetchBoards();
 	};
+
+	// 현재 페이지에 해당하는 목록만 슬라이스
+	const totalPages = Math.ceil(boards.length / PAGE_SIZE);
+	const currentList = boards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
 	return (
 		<div className="admin_section">
@@ -68,7 +75,7 @@ function AdminBoardList() {
 				</thead>
 				<tbody>
 					{/* boards 배열 순회 — 제목 클릭 시 상세 페이지 이동, 삭제 클릭 시 Modal 오픈 */}
-					{boards.map((item) => (
+					{currentList.map((item) => (
 						<tr key={item.boardSeq}>
 							<td>{item.boardSeq}</td>
 							<td>{CATEGORY_LABEL[item.category] ?? item.category}</td>
@@ -87,6 +94,10 @@ function AdminBoardList() {
 			</table>
 
 			{/* 삭제 확인 모달 — deleteTarget이 있을 때만 렌더링 */}
+			{totalPages > 1 && (
+				<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+			)}
+
 			{deleteTarget && (
 				<Modal
 					message="게시글을 삭제하시겠습니까?"

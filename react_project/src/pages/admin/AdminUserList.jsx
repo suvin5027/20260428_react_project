@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import adminApi from '../../api/adminApi';
-import { ROLE_OPTIONS } from '../../constants';
+import Pagination from '../../components/Pagination';
+import { ROLE_OPTIONS, PAGE_SIZE } from '../../constants';
 import { MdSearch } from 'react-icons/md';
 
 function AdminUserList() {
 	const [users, setUsers] = useState([]);
 	const [keyword, setKeyword] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
 
 	// 마운트 시 전체 유저 목록 로드
 	useEffect(() => {
@@ -23,8 +25,9 @@ function AdminUserList() {
 		}
 	};
 
-	// 검색 버튼 클릭 또는 Enter → fetchUsers 재호출
+	// 검색 버튼 클릭 또는 Enter → 1페이지로 초기화 후 재조회
 	const handleSearch = () => {
+		setCurrentPage(1);
 		fetchUsers();
 	};
 
@@ -33,6 +36,10 @@ function AdminUserList() {
 		await adminApi.updateUserRole(userSeq, newRole);
 		fetchUsers();
 	};
+
+	// 현재 페이지에 해당하는 목록만 슬라이스
+	const totalPages = Math.ceil(users.length / PAGE_SIZE);
+	const currentList = users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
 	return (
 		<div className="admin_section">
@@ -71,8 +78,8 @@ function AdminUserList() {
 					</tr>
 				</thead>
 				<tbody>
-					{/* users 배열을 순회하며 각 유저를 한 행으로 렌더링 */}
-					{users.map((user) => (
+					{/* currentList — 현재 페이지에 해당하는 유저만 렌더링 */}
+					{currentList.map((user) => (
 						<tr key={user.userSeq}>
 							<td>{user.userSeq}</td>
 							<td>{user.userId}</td>
@@ -94,6 +101,10 @@ function AdminUserList() {
 					))}
 				</tbody>
 			</table>
+
+			{totalPages > 1 && (
+				<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+			)}
 		</div>
 	);
 }
