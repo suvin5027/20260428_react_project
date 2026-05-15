@@ -107,6 +107,18 @@ button {
 	}
 }
 
+// 신고 버튼
+.btn_report {
+	background: $color_white;
+	color: $color_orange;
+	border-color: $color_orange;
+
+	&:hover, &:focus {
+		background: $color_orange;
+		color: $color_white;
+	}
+}
+
 // 목록 버튼
 .btn_list {
 	background: $color-btn-list-bg;

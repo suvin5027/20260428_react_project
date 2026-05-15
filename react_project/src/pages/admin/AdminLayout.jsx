@@ -9,8 +9,8 @@ function AdminLayout() {
 				<ul className="admin_nav">
 					{/* TODO: NavLink to="/admin/users" — 유저 관리 메뉴 (_active 클래스 적용) */}
 					<NavLink to={"/admin/users"} className={({ isActive }) => `${isActive ? ' _active' : ''}`}>유저 관리 <MdChevronRight /></NavLink>
-					{/* TODO: NavLink to="/admin/boards" — 게시판 관리 메뉴 (_active 클래스 적용) */}
 					<NavLink to={"/admin/boards"} className={({ isActive }) => `${isActive ? ' _active' : ''}`}>게시판 관리 <MdChevronRight /></NavLink>
+					<NavLink to={"/admin/reports"} className={({ isActive }) => `${isActive ? ' _active' : ''}`}>신고 관리 <MdChevronRight /></NavLink>
 				</ul>
 			</aside>
 			<div className="admin_content">

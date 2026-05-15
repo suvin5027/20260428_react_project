@@ -96,6 +96,7 @@
 
 		&:hover { color: $color_555; background: $color_ddd; }
 		&.btn_del:hover { color: $color_red; background: $color_red_bg; }
+		&.btn_report:hover { color: $color_orange; background: $color_orange_bg; }
 	}
 }
 @media (max-width: 1280px) {

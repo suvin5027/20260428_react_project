@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MdLock } from 'react-icons/md';
 import commentApi from '../api/commentApi';
 import Modal from './Modal';
+import ReportModal from './ReportModal';
 
 // 댓글 1개를 그리는 컴포넌트 — 자식 댓글이 있으면 자기 자신을 다시 호출(재귀)
 function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user, onRefresh }) {
@@ -21,6 +22,7 @@ function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user,
 	const [editContent, setEditContent] = useState(comment.content);
 	const [replySecret, setReplySecret] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [showReportModal, setShowReportModal] = useState(false);
 
 	// -------------------------------------------------------
 	// 권한 체크 — true/false 변수로 미리 계산해두면 JSX가 깔끔해져
@@ -169,6 +171,12 @@ function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user,
 									삭제
 								</button>
 							)}
+							{/* 본인 댓글이 아닐 때만 신고 버튼 표시 */}
+							{user && !canEdit && (
+								<button className="btn_comment btn_report" onClick={() => setShowReportModal(true)}>
+									신고
+								</button>
+							)}
 						</div>
 					</h6>
 					{!editMode && <p className="comment_content">{comment.content}</p>}
@@ -301,6 +309,14 @@ function CommentItem({ comment, boardSeq, boardAuthorSeq, parentAuthorSeq, user,
 					message="댓글을 삭제하시겠습니까?"
 					onConfirm={() => { setShowDeleteModal(false); handleDelete(); }}
 					onCancel={() => setShowDeleteModal(false)}
+				/>
+			)}
+			{showReportModal && (
+				<ReportModal
+					targetType="COMMENT"
+					targetSeq={comment.commentSeq}
+					reporterSeq={user.userSeq}
+					onClose={() => setShowReportModal(false)}
 				/>
 			)}
 		</li>

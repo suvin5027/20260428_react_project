@@ -13,6 +13,7 @@ import BoardEdit from './pages/board/BoardEdit';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminUserList from './pages/admin/AdminUserList';
 import AdminBoardList from './pages/admin/AdminBoardList';
+import AdminReportList from './pages/admin/AdminReportList';
 import { isLoggedIn, getCurrentUser } from './utils/authStorage';
 import './App.scss';
 
@@ -49,6 +50,7 @@ function App() {
 							<Route index element={<Navigate to="/admin/users" replace />} />
 							<Route path="users" element={<AdminUserList />} />
 							<Route path="boards" element={<AdminBoardList />} />
+							<Route path="reports" element={<AdminReportList />} />
 						</Route>
 						<Route path="*" element={<ProtectedRoute><Navigate to="/" replace /></ProtectedRoute>} />
 					</Routes>

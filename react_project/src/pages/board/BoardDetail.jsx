@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Modal from '../../components/Modal';
+import ReportModal from '../../components/ReportModal';
 // TODO: CommentList import 추가
 import CommentList from '../../components/CommentList';
 import { CATEGORY_LABEL } from '../../constants';
@@ -28,6 +29,7 @@ function BoardDetail() {
 	const [post, setPost] = useState(null);
 	const [files, setFiles] = useState([]); // 첨부파일 목록
 	const [isDeleteModal, setIsDeleteModal] = useState(false);
+	const [isReportModal, setIsReportModal] = useState(false);
 	const [isBookmarkModal, setIsBookmarkModal] = useState(false);
 	// 비밀글 비밀번호 검증 관련 state
 	const [isVerified, setIsVerified] = useState(location.state?.verified || false); // 비밀번호 검증 통과 여부 (List에서 넘어온 경우 true)
@@ -234,12 +236,12 @@ function BoardDetail() {
 					<span className="board_detail_date">{post.createdAt}</span>
 					{/* API에서 내려오는 viewCount 값 표시 */}
 					<span className="board_detail_view">조회 {post.viewCount.toLocaleString()}</span>
-					{canDelete && (
-						<div className="board_btn_wrap board_hd_btn_wrap">
-							{isOwner && <Link to={`/board/${id}/edit`} state={{ verified: isVerified }} className="btn btn_edit">수정</Link>}
-							<button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>
-						</div>
-					)}
+					<div className="board_btn_wrap board_hd_btn_wrap">
+						{canDelete && isOwner && <Link to={`/board/${id}/edit`} state={{ verified: isVerified }} className="btn btn_edit">수정</Link>}
+						{canDelete && <button className="btn btn_del" onClick={() => setIsDeleteModal(true)}>삭제</button>}
+						{/* 본인 글이 아닐 때만 신고 버튼 표시 */}
+						{user && !isOwner && <button className="btn btn_report" onClick={() => setIsReportModal(true)}>신고</button>}
+					</div>
 				</div>
 			</div>
 
@@ -303,6 +305,14 @@ function BoardDetail() {
 					confirmClassName="btn_add"
 					onConfirm={confirmBookmark}
 					onCancel={() => setIsBookmarkModal(false)}
+				/>
+			)}
+			{isReportModal && (
+				<ReportModal
+					targetType="BOARD"
+					targetSeq={Number(id)}
+					reporterSeq={user.userSeq}
+					onClose={() => setIsReportModal(false)}
 				/>
 			)}
 			{/* ref로 _visible 클래스 직접 토글 — state 없이 fade 처리 */}
