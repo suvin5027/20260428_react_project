@@ -52,14 +52,14 @@ caption, .blind {
 		cursor: pointer;
 
 		&:hover {
-			border-color: $color_blue;
-			color: $color_blue;
+			border-color: $color_primary;
+			color: $color_primary;
 		}
 
 		// 현재 페이지
 		&.active {
-			background: $color_blue;
-			border-color: $color_blue;
+			background: $color_primary;
+			border-color: $color_primary;
 			color: $color_white;
 		}
 
@@ -149,13 +149,13 @@ caption, .blind {
 	transition: .2s;
 
 	&:hover {
-		border-color: $color_blue;
-		color: $color_blue;
+		border-color: $color_primary;
+		color: $color_primary;
 	}
 
 	&._active {
-		background: $color_blue;
-		border-color: $color_blue;
+		background: $color_primary;
+		border-color: $color_primary;
 		color: $color_white;
 		font-weight: 700;
 	}

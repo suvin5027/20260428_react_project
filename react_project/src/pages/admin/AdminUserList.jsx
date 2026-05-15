@@ -85,28 +85,33 @@ function AdminUserList() {
 					</tr>
 				</thead>
 				<tbody>
-					{/* currentList — 현재 페이지에 해당하는 유저만 렌더링 */}
-					{currentList.map((user) => (
-						<tr key={user.userSeq}>
-							<td>{user.userSeq}</td>
-							<td>{user.userId}</td>
-							<td>{user.userName}</td>
-							<td>{user.nickname}</td>
-							<td>{user.email}</td>
-							<td>{user.userRole}</td>
-							<td>{user.createdAt}</td>
-							<td>{user.lastLoginAt ?? '-'}</td>
-							<td>
-								{/* select의 value={user.userRole}로 현재 역할이 선택된 상태로 표시
-								    onChange에서 user.userSeq(이 행의 유저)와 선택값(새 역할)을 같이 넘김 */}
-								<select className="table_select" value={user.userRole} onChange={(e) => handleRoleChange(user.userSeq, e.target.value)}>
-									{ROLE_OPTIONS.map((role) => (
-										<option key={role.value} value={role.value}>{role.label}</option>
-									))}
-								</select>
-							</td>
+					{currentList.length === 0 ? (
+						<tr>
+							<td colSpan="9" className="admin_empty">검색 결과가 없습니다.</td>
 						</tr>
-					))}
+					) : (
+						currentList.map((user) => (
+							<tr key={user.userSeq}>
+								<td>{user.userSeq}</td>
+								<td>{user.userId}</td>
+								<td>{user.userName}</td>
+								<td>{user.nickname}</td>
+								<td>{user.email}</td>
+								<td>{user.userRole}</td>
+								<td>{user.createdAt}</td>
+								<td>{user.lastLoginAt ?? '-'}</td>
+								<td>
+									{/* select의 value={user.userRole}로 현재 역할이 선택된 상태로 표시
+									    onChange에서 user.userSeq(이 행의 유저)와 선택값(새 역할)을 같이 넘김 */}
+									<select className="table_select" value={user.userRole} onChange={(e) => handleRoleChange(user.userSeq, e.target.value)}>
+										{ROLE_OPTIONS.map((role) => (
+											<option key={role.value} value={role.value}>{role.label}</option>
+										))}
+									</select>
+								</td>
+							</tr>
+						))
+					)}
 				</tbody>
 			</table>
 

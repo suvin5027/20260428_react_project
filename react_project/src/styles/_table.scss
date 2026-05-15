@@ -50,7 +50,7 @@
 	border: 1px solid $color_table_border;
 
 	th, td {
-		padding: 8px 10px;
+		padding: 6px 10px;
 		border: none;
 		border-bottom: 1px solid $color_table_cell_border;
 		border-right: 1px solid $color_table_cell_border;
@@ -59,6 +59,7 @@
 	}
 
 	th {
+		padding: 10px;
 		background: $color_table_head_bg;
 		color: $color_table_head_text;
 		font-weight: 700;
@@ -74,6 +75,11 @@
 	tbody tr:last-child td,
 	tbody tr:last-child th {
 		border-bottom: none;
+	}
+
+	tr th:last-child,
+	tr td:last-child {
+		border-right: none;
 	}
 
 	tr:hover td {

@@ -4,10 +4,13 @@ import adminApi from '../../api/adminApi';
 import Modal from '../../components/Modal';
 import Pagination from '../../components/Pagination';
 import { CATEGORY_LABEL, PAGE_SIZE } from '../../constants';
+import { MdSearch } from 'react-icons/md';
 
 function AdminBoardList() {
 	const [boards, setBoards] = useState([]);
 	const [category, setCategory] = useState(''); // 카테고리 필터 ('' = 전체)
+	const [keyword, setKeyword] = useState('');
+	const [searchType, setSearchType] = useState('title'); // title / content / author
 	const [deleteTarget, setDeleteTarget] = useState(null); // 삭제할 boardSeq (Modal용)
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -17,14 +20,20 @@ function AdminBoardList() {
 		fetchBoards();
 	}, [category]);
 
-	// category 기준으로 게시글 목록 조회 ('' = 전체)
+	// category + keyword + searchType 기준으로 게시글 목록 조회
 	const fetchBoards = async () => {
 		try {
-			const res = await adminApi.getBoards({ category });
+			const res = await adminApi.getBoards({ category, keyword, searchType });
 			setBoards(res.data);
 		} catch (e) {
 			console.error(e);
 		}
+	};
+
+	// 검색 버튼 클릭 또는 Enter → 1페이지로 초기화 후 재조회
+	const handleSearch = () => {
+		setCurrentPage(1);
+		fetchBoards();
 	};
 
 	// 게시글 삭제 후 목록 갱신
@@ -63,6 +72,33 @@ function AdminBoardList() {
 				</ul>
 			</section>
 
+			{/* 검색 — 검색 유형 선택(제목/내용/작성자) + 키워드 입력 */}
+			<section className="search_wrap search_left_wrap">
+				<div className="search_form_group">
+					<select
+						className="search_select"
+						value={searchType}
+						onChange={(e) => setSearchType(e.target.value)}
+					>
+						<option value="title">제목</option>
+						<option value="content">내용</option>
+						<option value="author">작성자</option>
+					</select>
+					<input
+						type="search"
+						name="search"
+						id="boardSearch"
+						className="search_input"
+						value={keyword}
+						onChange={(e) => setKeyword(e.target.value)}
+						onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+					/>
+					<button type="button" className="btn btn_search" onClick={handleSearch}>
+						<MdSearch />
+					</button>
+				</div>
+			</section>
+
 			<table className="table admin_table">
 				<caption>게시판 관리 테이블</caption>
 				<colgroup>
@@ -70,7 +106,9 @@ function AdminBoardList() {
 					<col style={{width: '75px'}} />
 					<col />
 					<col style={{width: '90px'}} />
-					<col style={{width: '65px'}} />
+					<col style={{width: '60px'}} />
+					<col style={{width: '60px'}} />
+					<col style={{width: '60px'}} />
 					<col style={{width: '130px'}} />
 					<col style={{width: '70px'}} />
 				</colgroup>
@@ -81,27 +119,36 @@ function AdminBoardList() {
 						<th scope="col">제목</th>
 						<th scope="col">작성자</th>
 						<th scope="col">조회수</th>
+						<th scope="col">좋아요</th>
+						<th scope="col">댓글</th>
 						<th scope="col">등록일</th>
 						<th scope="col">관리</th>
 					</tr>
 				</thead>
 				<tbody>
-					{/* boards 배열 순회 — 제목 클릭 시 상세 페이지 이동, 삭제 클릭 시 Modal 오픈 */}
-					{currentList.map((item) => (
-						<tr key={item.boardSeq}>
-							<td>{item.boardSeq}</td>
-							<td>{CATEGORY_LABEL[item.category] ?? item.category}</td>
-							<td className="text_left">
-								<Link to={`/board/${item.boardSeq}`}>{item.title}</Link>
-							</td>
-							<td>{item.author}</td>
-							<td>{item.viewCount}</td>
-							<td>{item.createdAt}</td>
-							<td>
-								<button type="button" className="btn btn_del" onClick={() => setDeleteTarget(item.boardSeq)}>삭제</button>
-							</td>
+					{currentList.length === 0 ? (
+						<tr>
+							<td colSpan="9" className="admin_empty">검색 결과가 없습니다.</td>
 						</tr>
-					))}
+					) : (
+						currentList.map((item) => (
+							<tr key={item.boardSeq}>
+								<td>{item.boardSeq}</td>
+								<td>{CATEGORY_LABEL[item.category] ?? item.category}</td>
+								<td className="text_left">
+									<Link to={`/board/${item.boardSeq}`}>{item.title}</Link>
+								</td>
+								<td>{item.author}</td>
+								<td className="text_right">{item.viewCount.toLocaleString()}</td>
+								<td className="text_right">{item.likeCount.toLocaleString()}</td>
+								<td className="text_right">{item.commentCount.toLocaleString()}</td>
+								<td>{item.createdAt}</td>
+								<td>
+									<button type="button" className="btn btn_del" onClick={() => setDeleteTarget(item.boardSeq)}>삭제</button>
+								</td>
+							</tr>
+						))
+					)}
 				</tbody>
 			</table>
 
