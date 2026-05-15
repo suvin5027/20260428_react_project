@@ -40,7 +40,10 @@ function AdminBoardList() {
 
 	return (
 		<div className="admin_section">
-			<h3 className="admin_section_title">게시판 관리</h3>
+			<h3 className="admin_section_title">
+				<span>게시판 관리</span>
+				<span className="admin_total">총 {boards.length}건</span>
+			</h3>
 
 			{/* 카테고리 탭 필터 — 선택된 category와 일치하면 _active */}
 			<section className="tab_wrap">
@@ -62,6 +65,15 @@ function AdminBoardList() {
 
 			<table className="table admin_table">
 				<caption>게시판 관리 테이블</caption>
+				<colgroup>
+					<col style={{width: '55px'}} />
+					<col style={{width: '75px'}} />
+					<col />
+					<col style={{width: '90px'}} />
+					<col style={{width: '65px'}} />
+					<col style={{width: '130px'}} />
+					<col style={{width: '70px'}} />
+				</colgroup>
 				<thead>
 					<tr>
 						<th scope="col">번호</th>
@@ -79,7 +91,7 @@ function AdminBoardList() {
 						<tr key={item.boardSeq}>
 							<td>{item.boardSeq}</td>
 							<td>{CATEGORY_LABEL[item.category] ?? item.category}</td>
-							<td>
+							<td className="text_left">
 								<Link to={`/board/${item.boardSeq}`}>{item.title}</Link>
 							</td>
 							<td>{item.author}</td>
@@ -93,9 +105,10 @@ function AdminBoardList() {
 				</tbody>
 			</table>
 
-			{/* 삭제 확인 모달 — deleteTarget이 있을 때만 렌더링 */}
 			{totalPages > 1 && (
-				<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+				<div className="admin_list_bottom">
+					<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+				</div>
 			)}
 
 			{deleteTarget && (

@@ -79,7 +79,6 @@ caption, .blind {
 	display: flex;
 	justify-content: center;
 	gap: 5px;
-	@include mb(15);
 
 	&.search_left_wrap{
 		justify-content: flex-start;
@@ -161,3 +160,10 @@ caption, .blind {
 		font-weight: 700;
 	}
 }
+
+// ============================================================
+// 텍스트 정렬
+// ============================================================
+.text_left   { text-align: left !important; }
+.text_center { text-align: center !important; }
+.text_right  { text-align: right !important; }

@@ -50,14 +50,26 @@
 	flex: 1;
 	min-width: 0;
 }
+.admin_section{
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
 
 // ============================================================
 // 어드민 섹션 공통
 // ============================================================
 .admin_section_title {
-	margin-bottom: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	font-size: $font_size_lg;
 	font-weight: 700;
+}
+.admin_total {
+	font-size: $font_size_sm;
+	font-weight: 400;
+	color: $color_555;
 }
 
 // 카테고리 필터
@@ -65,4 +77,14 @@
 	display: flex;
 	gap: 6px;
 	margin-bottom: 16px;
+}
+
+// 페이지네이션 영역
+.admin_list_bottom {
+	display: flex;
+	justify-content: center;
+
+	.pagination {
+		margin-top: 0;
+	}
 }

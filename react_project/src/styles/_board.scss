@@ -9,7 +9,6 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	@include mb(15);
 }
 .board_title{
 	font-size: $font_size_h1;
@@ -35,9 +34,6 @@
 	border-bottom: 1px solid $color_ddd;
 
 	&:last-child{
-		border-bottom: 1px solid $color_ddd;
-	}
-	&:nth-child(15):last-child{
 		border-bottom: none;
 	}
 }
@@ -210,7 +206,6 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	@include mt(20);
 }
 
 // ============================================================

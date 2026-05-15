@@ -9,16 +9,22 @@
 	border: 1px solid $color_gray_border;
 
 	th, td {
-		padding: 10px 12px;
+		padding: 6px 10px;
 		border: 1px solid $color_gray_border;
-		text-align: left;
+		text-align: center;
 		font-size: $font_size_s;
 	}
+
 
 	th {
 		background: $color_gray_bg;
 		font-weight: bold;
 		color: $color_dark;
+	}
+
+	a {
+		color: $color_blue;
+		&:hover { text-decoration: underline; }
 	}
 
 	// hover 기본 적용
@@ -40,19 +46,53 @@
 // 어드민 테이블
 // ============================================================
 .admin_table {
-	width: 100%;
-	th {
-		background: $color_f5f5f5;
-		font-weight: 700;
-		white-space: nowrap;
-	}
-	td {
+	table-layout: fixed;
+	border: 1px solid $color_table_border;
+
+	th, td {
+		padding: 8px 10px;
+		border: none;
+		border-bottom: 1px solid $color_table_cell_border;
+		border-right: 1px solid $color_table_cell_border;
+		font-size: $font_size_sm;
 		vertical-align: middle;
 	}
-	// 관리 버튼 셀
-	.admin_table_actions {
-		display: flex;
-		gap: 4px;
-		justify-content: center;
+
+	th {
+		background: $color_table_head_bg;
+		color: $color_table_head_text;
+		font-weight: 700;
+		white-space: nowrap;
+		border-bottom: 1px solid $color_table_border;
+		border-right: 1px solid $color_table_border;
+	}
+
+	td {
+		color: $color_333;
+	}
+
+	tbody tr:last-child td,
+	tbody tr:last-child th {
+		border-bottom: none;
+	}
+
+	tr:hover td {
+		background: $color_blue_bg;
+	}
+
+	// 테이블 내 select
+	.table_select {
+		padding: 2px 16px 2px 6px;
+		border: 1px solid $color_ddd;
+		border-radius: $border-radius-base;
+		font-size: $font_size_sm;
+		background: $color_white;
+		cursor: pointer;
+	}
+
+	// 테이블 내 버튼 소형화
+	td .btn {
+		padding: 3px 10px;
+		font-size: $font_size_x;
 	}
 }

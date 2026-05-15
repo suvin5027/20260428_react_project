@@ -43,7 +43,10 @@ function AdminUserList() {
 
 	return (
 		<div className="admin_section">
-			<h3 className="admin_section_title">유저 관리</h3>
+			<h3 className="admin_section_title">
+				<span>유저 관리</span>
+				<span className="admin_total">총 {users.length}건</span>
+			</h3>
 
 			{/* 검색 — 아이디 / 이름 / 닉네임 통합 검색 */}
 			<section className="search_wrap search_left_wrap">
@@ -65,6 +68,9 @@ function AdminUserList() {
 
 			<table className="table admin_table">
 				<caption>유저 관리 테이블</caption>
+				<colgroup>
+					<col style={{width: '55px'}} />
+				</colgroup>
 				<thead>
 					<tr>
 						<th scope="col">번호</th>
@@ -74,6 +80,7 @@ function AdminUserList() {
 						<th scope="col">이메일</th>
 						<th scope="col">권한</th>
 						<th scope="col">가입일</th>
+						<th scope="col">최근 접속</th>
 						<th scope="col">관리</th>
 					</tr>
 				</thead>
@@ -88,10 +95,11 @@ function AdminUserList() {
 							<td>{user.email}</td>
 							<td>{user.userRole}</td>
 							<td>{user.createdAt}</td>
+							<td>{user.lastLoginAt ?? '-'}</td>
 							<td>
 								{/* select의 value={user.userRole}로 현재 역할이 선택된 상태로 표시
 								    onChange에서 user.userSeq(이 행의 유저)와 선택값(새 역할)을 같이 넘김 */}
-								<select value={user.userRole} onChange={(e) => handleRoleChange(user.userSeq, e.target.value)}>
+								<select className="table_select" value={user.userRole} onChange={(e) => handleRoleChange(user.userSeq, e.target.value)}>
 									{ROLE_OPTIONS.map((role) => (
 										<option key={role.value} value={role.value}>{role.label}</option>
 									))}
@@ -103,7 +111,9 @@ function AdminUserList() {
 			</table>
 
 			{totalPages > 1 && (
-				<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+				<div className="admin_list_bottom">
+					<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+				</div>
 			)}
 		</div>
 	);
