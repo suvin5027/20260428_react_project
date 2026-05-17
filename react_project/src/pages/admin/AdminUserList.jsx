@@ -19,7 +19,7 @@ function AdminUserList() {
 	// keyword + role 기준으로 유저 목록 조회
 	const fetchUsers = async () => {
 		try {
-			const res = await adminApi.getUsers({ keyword, role });
+			const res = await adminApi.getUsers({ keyword, userRole: role });
 			setUsers(res.data);
 		} catch (e) {
 			console.error(e);
