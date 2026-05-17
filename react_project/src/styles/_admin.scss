@@ -78,11 +78,11 @@
 	color: $color_555;
 }
 
-// 카테고리 필터
-.admin_filter {
+// 탭 + 검색 묶음
+.admin_filter_wrap {
 	display: flex;
-	gap: 6px;
-	margin-bottom: 16px;
+	flex-direction: column;
+	gap: 8px;
 }
 
 // 검색 결과 없음

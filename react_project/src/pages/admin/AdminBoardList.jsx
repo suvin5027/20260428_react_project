@@ -54,48 +54,49 @@ function AdminBoardList() {
 				<span className="admin_total">총 {boards.length}건</span>
 			</h3>
 
-			{/* 카테고리 탭 필터 — 선택된 category와 일치하면 _active */}
-			<section className="tab_wrap">
-				<ul className="tab_list" role="tablist">
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${category === "" ? " _active" : ""}`} onClick={() => setCategory("")}>전체</button>
-					</li>
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${category === "notice" ? " _active" : ""}`} onClick={() => setCategory("notice")}>공지</button>
-					</li>
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${category === "general" ? " _active" : ""}`} onClick={() => setCategory("general")}>일반</button>
-					</li>
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${category === "question" ? " _active" : ""}`} onClick={() => setCategory("question")}>질문</button>
-					</li>
-				</ul>
-			</section>
-
-			{/* 검색 — 검색 유형 선택(제목/내용/작성자) + 키워드 입력 */}
-			<section className="search_wrap search_left_wrap">
-				<div className="search_form_group">
-					<select
-						className="search_select"
-						value={searchType}
-						onChange={(e) => setSearchType(e.target.value)}
-					>
-						<option value="title">제목</option>
-						<option value="content">내용</option>
-						<option value="author">작성자</option>
-					</select>
-					<input
-						type="search"
-						name="search"
-						id="boardSearch"
-						className="search_input"
-						value={keyword}
-						onChange={(e) => setKeyword(e.target.value)}
-						onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-					/>
-					<button type="button" className="btn btn_search" onClick={handleSearch}>
-						<MdSearch />
-					</button>
+			<section className="admin_filter_wrap">
+				{/* 카테고리 탭 필터 — 선택된 category와 일치하면 _active */}
+				<div className="tab_wrap">
+					<ul className="tab_list" role="tablist">
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${category === "" ? " _active" : ""}`} onClick={() => setCategory("")}>전체</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${category === "notice" ? " _active" : ""}`} onClick={() => setCategory("notice")}>공지</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${category === "general" ? " _active" : ""}`} onClick={() => setCategory("general")}>일반</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${category === "question" ? " _active" : ""}`} onClick={() => setCategory("question")}>질문</button>
+						</li>
+					</ul>
+				</div>
+				{/* 검색 — 검색 유형 선택(제목/내용/작성자) + 키워드 입력 */}
+				<div className="search_wrap search_left_wrap">
+					<div className="search_form_group">
+						<select
+							className="search_select"
+							value={searchType}
+							onChange={(e) => setSearchType(e.target.value)}
+						>
+							<option value="title">제목</option>
+							<option value="content">내용</option>
+							<option value="author">작성자</option>
+						</select>
+						<input
+							type="search"
+							name="search"
+							id="boardSearch"
+							className="search_input"
+							value={keyword}
+							onChange={(e) => setKeyword(e.target.value)}
+							onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+						/>
+						<button type="button" className="btn btn_search" onClick={handleSearch}>
+							<MdSearch />
+						</button>
+					</div>
 				</div>
 			</section>
 

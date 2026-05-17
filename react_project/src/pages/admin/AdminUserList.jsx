@@ -6,19 +6,20 @@ import { MdSearch } from 'react-icons/md';
 
 function AdminUserList() {
 	const [users, setUsers] = useState([]);
+	const [role, setRole] = useState('');
 	const [keyword, setKeyword] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 
-	// 마운트 시 전체 유저 목록 로드
+	// role 탭 변경 시 1페이지로 초기화 후 재조회
 	useEffect(() => {
+		setCurrentPage(1);
 		fetchUsers();
-	}, []);
+	}, [role]);
 
-	// keyword 상태 기준으로 유저 목록 조회
-	// keyword가 빈 문자열이면 Spring에서 전체 반환, 값이 있으면 아이디/이름/닉네임 필터링
+	// keyword + role 기준으로 유저 목록 조회
 	const fetchUsers = async () => {
 		try {
-			const res = await adminApi.getUsers({ keyword });
+			const res = await adminApi.getUsers({ keyword, role });
 			setUsers(res.data);
 		} catch (e) {
 			console.error(e);
@@ -48,21 +49,40 @@ function AdminUserList() {
 				<span className="admin_total">총 {users.length}건</span>
 			</h3>
 
-			{/* 검색 — 아이디 / 이름 / 닉네임 통합 검색 */}
-			<section className="search_wrap search_left_wrap">
-				<div className="search_form_group">
-					<input
-						type="search"
-						name="search"
-						id="userRoleSearch"
-						className="search_input"
-						value={keyword}
-						onChange={(e) => setKeyword(e.target.value)}
-						onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-					/>
-					<button type="button" className="btn btn_search" onClick={handleSearch}>
-						<MdSearch />
-					</button>
+			<section className="admin_filter_wrap">
+				{/* 권한 탭 필터 */}
+				<div className="tab_wrap">
+					<ul className="tab_list" role="tablist">
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${role === '' ? ' _active' : ''}`} onClick={() => setRole('')}>전체</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${role === 'USER' ? ' _active' : ''}`} onClick={() => setRole('USER')}>사용자</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${role === 'ADMIN' ? ' _active' : ''}`} onClick={() => setRole('ADMIN')}>관리자</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${role === 'SUPER' ? ' _active' : ''}`} onClick={() => setRole('SUPER')}>최고관리자</button>
+						</li>
+					</ul>
+				</div>
+				{/* 검색 — 아이디 / 이름 / 닉네임 통합 검색 */}
+				<div className="search_wrap search_left_wrap">
+					<div className="search_form_group">
+						<input
+							type="search"
+							name="search"
+							id="userRoleSearch"
+							className="search_input"
+							value={keyword}
+							onChange={(e) => setKeyword(e.target.value)}
+							onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+						/>
+						<button type="button" className="btn btn_search" onClick={handleSearch}>
+							<MdSearch />
+						</button>
+					</div>
 				</div>
 			</section>
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import reportApi from '../../api/reportApi';
 import Pagination from '../../components/Pagination';
 import { PAGE_SIZE } from '../../constants';
+import { MdSearch } from 'react-icons/md';
 
 const REASON_LABEL = {
 	ABUSE:   '욕설/혐오',
@@ -18,6 +19,7 @@ const STATUS_LABEL = {
 function AdminReportList() {
 	const [reports, setReports] = useState([]);
 	const [status, setStatus] = useState(''); // '' = 전체
+	const [keyword, setKeyword] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 
 	useEffect(() => {
@@ -27,11 +29,17 @@ function AdminReportList() {
 
 	const fetchReports = async () => {
 		try {
-			const res = await reportApi.getReports({ status });
+			const res = await reportApi.getReports({ status, keyword });
 			setReports(res.data);
 		} catch (e) {
 			console.error(e);
 		}
+	};
+
+	// 검색 버튼 클릭 또는 Enter → 1페이지로 초기화 후 재조회
+	const handleSearch = () => {
+		setCurrentPage(1);
+		fetchReports();
 	};
 
 	// 신고 처리 상태 토글 (PENDING ↔ PROCESSED)
@@ -51,19 +59,38 @@ function AdminReportList() {
 				<span className="admin_total">총 {reports.length}건</span>
 			</h3>
 
-			{/* 처리 상태 탭 필터 */}
-			<section className="tab_wrap">
-				<ul className="tab_list" role="tablist">
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${status === '' ? ' _active' : ''}`} onClick={() => setStatus('')}>전체</button>
-					</li>
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${status === 'PENDING' ? ' _active' : ''}`} onClick={() => setStatus('PENDING')}>미처리</button>
-					</li>
-					<li className="tab_item">
-						<button type="button" role="tab" className={`tab_btn${status === 'PROCESSED' ? ' _active' : ''}`} onClick={() => setStatus('PROCESSED')}>처리완료</button>
-					</li>
-				</ul>
+			<section className="admin_filter_wrap">
+				{/* 처리 상태 탭 필터 */}
+				<div className="tab_wrap">
+					<ul className="tab_list" role="tablist">
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${status === '' ? ' _active' : ''}`} onClick={() => setStatus('')}>전체</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${status === 'PENDING' ? ' _active' : ''}`} onClick={() => setStatus('PENDING')}>미처리</button>
+						</li>
+						<li className="tab_item">
+							<button type="button" role="tab" className={`tab_btn${status === 'PROCESSED' ? ' _active' : ''}`} onClick={() => setStatus('PROCESSED')}>처리완료</button>
+						</li>
+					</ul>
+				</div>
+				{/* 검색 — 대상 내용 / 신고자 통합 검색 */}
+				<div className="search_wrap search_left_wrap">
+					<div className="search_form_group">
+						<input
+							type="search"
+							name="search"
+							id="reportSearch"
+							className="search_input"
+							value={keyword}
+							onChange={(e) => setKeyword(e.target.value)}
+							onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+						/>
+						<button type="button" className="btn btn_search" onClick={handleSearch}>
+							<MdSearch />
+						</button>
+					</div>
+				</div>
 			</section>
 
 			<table className="table admin_table">

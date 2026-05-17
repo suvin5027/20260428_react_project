@@ -129,9 +129,6 @@ caption, .blind {
 // ============================================================
 // 탭
 // ============================================================
-.tab_wrap {
-	margin-bottom: 16px;
-}
 .tab_list {
 	display: flex;
 	align-items: center;
@@ -141,7 +138,7 @@ caption, .blind {
 .tab_btn {
 	padding: 6px 16px;
 	border: 1px solid $color_ddd;
-	border-radius: $border-radius-pill;
+	border-radius: $border-radius-base;
 	background: $color_white;
 	font-size: $font_size_sm;
 	color: $color_555;
